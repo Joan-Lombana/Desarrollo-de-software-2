@@ -1,1 +1,30 @@
-<p>¡¡HOLA MUNDO!!</p>
+<div class="contenedor-login">
+    <div class="cuadro-login">
+        <!-- Lado izquierdo - imagen -->
+        <div class="lado-imagen">
+            <div class="logo-header">
+                <img class="logo" src="src/assets/" alt="EcoRuta Logo">
+                <h2>EcoRuta</h2>
+                <p>Sistema de Rutas de recoleccion</p>
+            </div>
+            
+            <div class="ilustracion">
+                <img src="src/assets/Google.png" alt="Imagen reco">
+            </div>
+            
+ 
+        </div>
+
+        <!-- Lado derecho - formulario -->
+        <div class="lado-formulario">
+            <div class="contenido-formulario">
+                <h1 class="titulo-bienvenida">Bienvenido</h1>
+                <p class="subtitulo">Accede al sistema</p>
+
+                <div class="formulario">
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

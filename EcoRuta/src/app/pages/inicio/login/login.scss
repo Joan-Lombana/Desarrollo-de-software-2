@@ -1,0 +1,209 @@
+.cuadro-formulario {
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.titulo-formulario {
+  color: #2d5f4f;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+form {
+  width: 100%;
+}
+
+// campo de formulario
+.campo-formulario {
+  margin-bottom: 15px;
+
+  label {
+    display: block;
+    color: #2d5f4f;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #d4ebe3;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #2d5f4f;
+    background: white;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: #a8c9bd;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #5a8c7a;
+      box-shadow: 0 0 0 3px rgba(90, 140, 122, 0.1);
+    }
+
+    &.ng-invalid.ng-touched {
+      border-color: #ff6b6b;
+    }
+  }
+}
+
+// campo de contraseña
+.campo-password {
+  position: relative;
+
+  input {
+    padding-right: 45px;
+  }
+
+  .btn-toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+    transition: opacity 0.3s ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+// botones
+
+.btn-login {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #2d5f4f 0%, #1a3a2e 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(45, 95, 79, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+  //  opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+
+// separador
+.separador {
+  display: flex;
+  align-items: center;
+  margin: 18px 0;
+  
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #d4ebe3;
+  }
+
+  span {
+    padding: 0 12px;
+    color: #a8c9bd;
+    font-size: 12px;
+    font-weight: 500;
+  }
+}
+
+// boton google
+.btn-google {
+  width: 100%;
+  padding: 12px;
+  background: white;
+  color: #2d5f4f;
+  border: 2px solid #d4ebe3;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background: #f8fdfb;
+    border-color: #5a8c7a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(90, 140, 122, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// registro
+//.registro {
+  //text-align: center;
+  //color: #5a8c7a;
+  //font-size: 13px;
+  //margin: 0;
+
+  //a {
+    //color: #2d5f4f;
+    //text-decoration: none;
+    //font-weight: 700;
+    //margin-left: 5px;
+    //transition: color 0.3s ease;
+
+    //&:hover {
+      //color: #1a3a2e;
+      //text-decoration: underline;
+    //}
+  //}
+//}
+
+// === acomodarse a tamaño mas pequeño ===
+//@media (max-width: 480px) {
+  //.titulo-formulario {
+    //font-size: 24px;
+  //}
+
+  //.campo-formulario input {
+    //padding: 12px 14px;
+    //font-size: 14px;
+  //}
+
+  //.btn-login,
+  //.btn-google {
+    //padding: 13px;
+    //font-size: 15px;
+  //}
+//}

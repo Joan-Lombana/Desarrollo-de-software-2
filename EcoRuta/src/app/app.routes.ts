@@ -1,18 +1,25 @@
 import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
-import { Inicio } from './pages/inicio/inicio';
-import { Principal } from './pages/principal/principal';
+import { InicioComponent } from './pages/inicio/inicio';
+import { PrincipalComponent } from './pages/principal/principal';
+import { LoginComponent } from './pages/inicio/login/login';
 
 
 
 export const routes: Routes = [
     {
         path: "",
-        component: Inicio
+        component: InicioComponent,
+        children: [
+            {
+                path: '',
+                component: LoginComponent
+            }
+        ]
     },
 
      {
-        path: "",
-        component: Principal
+        path: "principal",
+        component: PrincipalComponent,
     }
 ];
