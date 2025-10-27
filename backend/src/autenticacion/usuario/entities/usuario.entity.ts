@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
 import { Perfil } from 'src/autenticacion/perfil/entities/perfil.entity';
-import { Rol } from 'src/autenticacion/rol/entities/rol.entity'; 
+
 
 @Entity('usuarios')
 export class Usuario {
@@ -20,7 +20,6 @@ export class Usuario {
   @JoinColumn()
   perfil: Perfil;
 
-  @ManyToOne(() => Rol, rol => rol.usuarios)
-  rol: Rol;
+ 
 }
 

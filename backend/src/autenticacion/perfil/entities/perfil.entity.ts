@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany} from 'typeorm';
 import { Usuario } from 'src/autenticacion/usuario/entities/usuario.entity';
+import { Rol } from 'src/autenticacion/rol/entities/rol.entity';
 
 @Entity('perfiles')
 export class Perfil {
@@ -14,5 +15,8 @@ export class Perfil {
 
   @OneToOne(() => Usuario, usuario => usuario.perfil)
   usuario: Usuario;
+
+  @OneToMany(() => Rol, rol => rol.perfiles)
+  rol: Rol;
 }
 
