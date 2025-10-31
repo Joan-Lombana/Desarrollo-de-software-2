@@ -1,20 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Ruta } from './ruta/entities/ruta.entity';
-import { Barrio } from './barrio/entities/barrio.entity';
-import { Vehiculo } from './vehiculo/entities/vehiculo.entity';
-import { Recorrido } from './recorrido/entities/recorrido.entity';
-import { Posicion } from './posicion/entities/posicion.entity';
-import { Horario } from './horario/entities/horario.entity';
-import { RutaController } from './ruta/ruta.controller';
-import { RutaService } from './ruta/ruta.service';
+import { HttpModule } from '@nestjs/axios';
+import { OperativoService } from './operativo.service';
+import { OperativoController } from './operativo.controller';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Ruta,Barrio,Vehiculo,Recorrido,Posicion,Horario,])],
-  controllers: [RutaController],
-  providers: [RutaService],
-  exports: [TypeOrmModule]
- 
+  imports: [HttpModule],
+  controllers: [OperativoController],
+  providers: [OperativoService],
 })
 export class OperativoModule {}

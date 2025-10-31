@@ -4,20 +4,26 @@ import { AppService } from './app.service';
 import { AutenticacionModule } from './autenticacion/autenticacion.module';
 import { OperativoModule } from './operativo/operativo.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ApilucioModule } from 'rutas-service/src/apilucio/apilucio.module';
+
 
 
 @Module({
-  imports: [TypeOrmModule.forRoot({
-    type: 'postgres',
-      host: 'localhost', // o el nombre del contenedor, ej: 'ecoruta-postgis'
-      port: 5434,
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'ecoruta-postgis',
+      port: 5432,
       username: 'postgres',
       password: '123456',
       database: 'ecoruta',
       autoLoadEntities: true,
-      synchronize: true, // 👈 crea automáticamente las tablas (solo en desarrollo)
+      synchronize: true,
     }),
-    AutenticacionModule, OperativoModule],
+    AutenticacionModule,
+    OperativoModule,
+    ApilucioModule, // 👈 ¡Este es el que falta!
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
