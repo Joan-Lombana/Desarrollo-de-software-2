@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       # -------------------------------
@@ -38,7 +38,8 @@ jobs:
       # -------------------------------
       - name: 🏗️ Compilar Angular
         working-directory: ./EcoRuta
-        run: npm run build -- --configuration production
+        run: npm run build -- --configuration production --base-href /joan_site/
+
 
       # -------------------------------
       # 5️⃣ Configurar acceso SSH
@@ -54,36 +55,40 @@ jobs:
       - name: 🚚 Desplegar frontend
         run: |
           echo "📤 Subiendo frontend al servidor..."
-          scp -o StrictHostKeyChecking=no -r EcoRuta/dist/* ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/tmp/eco_frontend/
+          scp -o StrictHostKeyChecking=no -r EcoRuta/dist/EcoRuta/browser/* ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/tmp/eco_frontend/
           ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} '
             echo "🧹 Limpiando /var/www/joan_site..."
-            sudo rm -rf /var/www/joan_site/*
-            sudo mv /tmp/eco_frontend/* /var/www/joan_site/
-            sudo chown -R www-data:www-data /var/www/joan_site
-            sudo chmod -R 755 /var/www/joan_site
-            sudo systemctl restart apache2 || sudo systemctl restart nginx
+            rm -rf /var/www/joan_site/*
+            ls -l /tmp/eco_frontend/
+            mv /tmp/eco_frontend/* /var/www/joan_site/
+            chown -R www-data:www-data /var/www/joan_site
+            schmod -R 755 /var/www/joan_site
+            systemctl restart apache2 || sudo systemctl restart nginx
             echo "✅ Frontend desplegado correctamente."
           '
 
       # -------------------------------
       # 7️⃣ Desplegar backend NestJS con Docker
       # -------------------------------
-      - name: 🐳 Desplegar backend Docker
-        run: |
-          echo "🔧 Conectando al servidor remoto para desplegar backend..."
-          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} '
-            set -e
-            cd /home/${{ secrets.DEPLOY_USER }}/var/www/joan_site/backend|| exit 1
+    #  - name: 🐳 Desplegar backend Docker
+    #    run: |
+    #      echo "🔧 Conectando al servidor remoto para desplegar backend..."
+    #      ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} '
+    #        set -e
+    #        cd /var/www/joan_site/Desarrollo-de-software-2/backend|| exit 1
 
-            echo "📥 Actualizando código..."
-            git pull origin main
+    #        echo "📥 Actualizando código..."
+    #        git fetch origin main
+    #        git reset --hard origin/main
+    #        git clean -fd
 
-            echo "🐳 Reconstruyendo contenedores..."
-            docker compose build --no-cache
-            docker compose up -d
 
-            echo "🧹 Limpiando recursos antiguos..."
-            docker system prune -f
+    #        echo "🐳 Reconstruyendo contenedores..."
+    #        docker compose build --no-cache
+    #        docker compose up -d
 
-            echo "✅ Backend actualizado correctamente."
-          '
+    #        echo "🧹 Limpiando recursos antiguos..."
+    #        docker system prune -f
+
+    #        echo "✅ Backend actualizado correctamente."
+    #     '
