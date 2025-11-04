@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AutenticacionModule } from './autenticacion/autenticacion.module';
+import { AuthModule } from './autenticacion/auth.module';
 import { OperativoModule } from './operativo/operativo.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApilucioModule } from 'rutas-service/src/apilucio/apilucio.module';
@@ -20,7 +20,7 @@ import { ApilucioModule } from 'rutas-service/src/apilucio/apilucio.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    AutenticacionModule,
+    AuthModule,
     OperativoModule,
     ApilucioModule, // 👈 ¡Este es el que falta!
   ],

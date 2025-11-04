@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 
-import { CalleAPI } from 'src/interfaces/calle.interface';
-import { RutaAPI } from 'src/interfaces/ruta.interface';
-import { VehiculoAPI } from 'src/interfaces/vehiculo.interface';
-import { HorarioAPI } from 'src/interfaces/horario.interface';
-import { RecorridoAPI } from 'src/interfaces/recorrido.interface';
-import { PosicionAPI } from 'src/interfaces/posicion.interface';
+import { CalleAPI } from '../interfaces/calle.interface';
+import { RutaAPI } from '../interfaces/ruta.interface';
+import { VehiculoAPI } from '../interfaces/vehiculo.interface';
+import { HorarioAPI } from '../interfaces/horario.interface';
+import { RecorridoAPI } from '../interfaces/recorrido.interface';
+import { PosicionAPI } from '../interfaces/posicion.interface';
 
 
 @Injectable()

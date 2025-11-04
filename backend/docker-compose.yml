@@ -56,13 +56,8 @@ services:
     depends_on:
       - rutas-service
       - postgis
-    environment:
-      DB_HOST: ecoruta-postgis
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASS: 123456
-      DB_NAME: ecoruta
-      ROUTES_SERVICE_URL: http://rutas-service:3001/apilucio
+    env_file:
+      - ./.env
     networks:
       - ecoruta_net
 

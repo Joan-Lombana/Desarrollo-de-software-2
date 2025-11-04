@@ -1,8 +1,8 @@
-# Dockerfile
 FROM node:20
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-EXPOSE 3001
-CMD ["npm", "run", "start"]
+RUN npm run build   # compila TS a JS en dist/
+EXPOSE 3000
+CMD ["node", "dist/main.js"]
