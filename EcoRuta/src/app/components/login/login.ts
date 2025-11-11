@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +12,7 @@ import { Router } from '@angular/router';
   styleUrl: './login.scss'
 })
 export class LoginComponent {
+  private auth = inject(AuthService);
   // datos del formulario
   loginData = {
     usuario: "",
@@ -32,8 +34,8 @@ export class LoginComponent {
   
 
   // login con Google
-  onGoogleLogin() {
-    console.log("Login con Google");
+    login() {
+    this.auth.loginWithGoogle();
   }
 
   // mostrar y ocultar contraseña
