@@ -24,20 +24,20 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          cache-dependency-path: EcoRuta/package-lock.json
+          cache-dependency-path: Frontend/package-lock.json
 
       # -------------------------------
       # 3️⃣ Instalar dependencias Angular
       # -------------------------------
       - name: 📦 Instalar dependencias del frontend
-        working-directory: ./EcoRuta
+        working-directory: ./Frontend
         run: npm ci
 
       # -------------------------------
       # 4️⃣ Compilar Angular (producción)
       # -------------------------------
       - name: 🏗️ Compilar Angular
-        working-directory: ./EcoRuta
+        working-directory: ./Frontend
         run: npm run build -- --configuration production --base-href /joan_site/
 
 
@@ -55,7 +55,7 @@ jobs:
       - name: 🚚 Desplegar frontend
         run: |
           echo "📤 Subiendo frontend al servidor..."
-          scp -o StrictHostKeyChecking=no -r EcoRuta/dist/EcoRuta/browser/* ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/tmp/eco_frontend/
+          scp -o StrictHostKeyChecking=no -r Frontend/dist/Frontend/browser/* ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/tmp/eco_frontend/
           ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} '
             echo "🧹 Limpiando /var/www/joan_site..."
             rm -rf /var/www/joan_site/*
