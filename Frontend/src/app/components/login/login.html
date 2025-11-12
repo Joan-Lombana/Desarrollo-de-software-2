@@ -1,0 +1,37 @@
+<div class="cuadro-formulario">
+  <h2 class="titulo-formulario">Iniciar Sesión</h2>
+
+  <form (ngSubmit)="onLogin()" #formulario="ngForm">
+    <!-- usuario -->
+    <div class="campo-formulario">
+      <label for="usuario">Nombre de usuario</label>
+      <input 
+        type="username" id="usuario" name="usuario" [(ngModel)]="loginData.usuario" placeholder="Usuario (。_。)" required username #usuarioInput="ngModel"/>
+    </div>
+
+    <!-- contraseña -->
+    <div class="campo-formulario">
+      <label for="contrasena">Contraseña</label>
+      <div class="campo-password">
+        <input type="'password'" id="contrasena" name="contrasena" [(ngModel)]="loginData.contrasena" placeholder="Contraseña" required minlength="6" #contrasenaInput="ngModel"/>
+      </div>
+    </div>
+
+    <!-- boton principal -->
+    <button type="submit" class="btn-login" [disabled]="formulario.invalid">
+      {{ 'Iniciar Sesión' }}
+    </button>
+
+    <!-- Separador -->
+    <div class="separador">
+      <span>O</span>
+    </div>
+
+    <!-- Boton Google -->
+    <button type="button" class="btn-google" (click)="login()">
+      Iniciar con Google
+    </button>
+
+
+  </form>
+</div>
