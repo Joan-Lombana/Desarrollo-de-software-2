@@ -36,8 +36,6 @@ export class LoginComponent {
     console.log("Login con Google");
   }
 
-  // mostrar y ocultar contraseña
-
-  // Recuperar contraseña
 
 }
+
