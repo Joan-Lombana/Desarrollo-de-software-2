@@ -1,4 +1,4 @@
-/*export const environment = {
+export const environment = {
   production: true,
-  apiUrl: 'https://tu-dominio-deploy.com' // URL del backend en producción
-};*/
+  apiUrl: '72.60.52.112/joan_site/' // URL del backend en producción
+};
