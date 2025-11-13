@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { RutasService } from '../../services/rutas';
 import { RutasComponent } from '../../components/rutas/rutas';
+import { Mapa } from '../../components/mapa/mapa';
 
 
 @Component({
   selector: 'app-principal',
   standalone: true,
-  imports: [RutasComponent],
+  imports: [ Mapa],
   templateUrl: './principal.html',
   styleUrls: ['./principal.scss'] // 👈 ojo, es "styleUrls" (plural)
 })

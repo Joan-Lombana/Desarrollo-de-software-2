@@ -10,7 +10,7 @@ import { RutasComponent } from './components/rutas/rutas';
 export const routes: Routes = [
     {
         path: "",
-        component: InicioComponent,
+        component: PrincipalComponent,
       
     },
 
