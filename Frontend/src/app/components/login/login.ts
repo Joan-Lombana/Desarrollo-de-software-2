@@ -1,45 +1,32 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './login.html',
-  styleUrl: './login.scss'
+  styleUrl: './login.scss',
 })
 export class LoginComponent {
   private auth = inject(AuthService);
-  // datos del formulario
-  loginData = {
-    usuario: "",
-    contrasena: ""
-  };
-  router = inject(Router);
+  private router = inject(Router);
 
-  // Metodo para iniciar sesion
-  onLogin() {
-      // (Organizar bien)!!!!
-      if (this.loginData.usuario === "Admin" && this.loginData.contrasena === "1234567") {
-        // redirigir a pagina principal
-        this.router.navigateByUrl('/principal');
-        localStorage.setItem('usuario', "Admin");
-      } else {
-       alert("ESO TA MAL"); 
-      }
-    }
-  
+  loginData = { correo: '', contrasena: '' };
 
-  // login con Google
-    login() {
-    this.auth.loginWithGoogle();
+  onLoginLocal() {
+    this.auth.loginLocal(this.loginData).subscribe({
+      next: () => this.router.navigateByUrl('/principal'),
+      error: () => alert('Correo o contraseña incorrectos')
+    });
   }
 
-  // mostrar y ocultar contraseña
-
-  // Recuperar contraseña
-
+  loginGoogle() {
+    this.auth.loginWithGoogle();
+  }
 }
+
+

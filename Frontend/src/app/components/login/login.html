@@ -1,25 +1,47 @@
 <div class="cuadro-formulario">
   <h2 class="titulo-formulario">Iniciar Sesión</h2>
 
-  <form (ngSubmit)="onLogin()" #formulario="ngForm">
-    <!-- usuario -->
+  <form (ngSubmit)="onLoginLocal()" #formulario="ngForm" novalidate>
+
+    <!-- CORREO -->
     <div class="campo-formulario">
-      <label for="usuario">Nombre de usuario</label>
+      <label for="correo">Correo</label>
       <input 
-        type="username" id="usuario" name="usuario" [(ngModel)]="loginData.usuario" placeholder="Usuario (。_。)" required username #usuarioInput="ngModel"/>
+        type="email"
+        id="correo"
+        name="correo"
+        [(ngModel)]="loginData.correo"
+        placeholder="ejemplo@correo.com"
+        required
+        email
+        #correoInput="ngModel"
+      />
+      <small *ngIf="correoInput.invalid && correoInput.touched" class="error">
+        Ingresa un correo válido.
+      </small>
     </div>
 
-    <!-- contraseña -->
+    <!-- CONTRASEÑA -->
     <div class="campo-formulario">
       <label for="contrasena">Contraseña</label>
-      <div class="campo-password">
-        <input type="'password'" id="contrasena" name="contrasena" [(ngModel)]="loginData.contrasena" placeholder="Contraseña" required minlength="6" #contrasenaInput="ngModel"/>
-      </div>
+      <input 
+        type="password"
+        id="contrasena"
+        name="contrasena"
+        [(ngModel)]="loginData.contrasena"
+        required
+        minlength="6"
+        placeholder="Min 6 caracteres"
+        #contrasenaInput="ngModel"
+      />
+      <small *ngIf="contrasenaInput.invalid && contrasenaInput.touched" class="error">
+        La contraseña debe tener al menos 6 caracteres.
+      </small>
     </div>
 
-    <!-- boton principal -->
+    <!-- BOTÓN PRINCIPAL -->
     <button type="submit" class="btn-login" [disabled]="formulario.invalid">
-      {{ 'Iniciar Sesión' }}
+      Iniciar Sesión
     </button>
 
     <!-- Separador -->
@@ -27,11 +49,11 @@
       <span>O</span>
     </div>
 
-    <!-- Boton Google -->
-    <button type="button" class="btn-google" (click)="login()">
+    <!-- Google -->
+    <button type="button" class="btn-google" (click)="loginGoogle()">
       Iniciar con Google
     </button>
 
-
   </form>
 </div>
+
