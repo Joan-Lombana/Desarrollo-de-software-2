@@ -20,7 +20,118 @@
         Ingresa un correo válido.
       </small>
     </div>
+  </div>
 
+  <!-- ========== LADO DERECHO: FORMULARIO ========== -->
+  <div class="login-right">
+    <div class="form-container">
+      
+      <!-- Header del formulario -->
+      <div class="form-header">
+        <h1 class="form-title">Bienvenido</h1>
+        <p class="form-subtitle">Accede al sistema de gestión</p>
+      </div>
+
+      <!-- Mensaje de error -->
+      <div class="error-message" *ngIf="errorMessage()">
+        <span>{{ errorMessage() }}</span>
+      </div>
+
+      <!-- Formulario -->
+      <div class="login-form">
+        
+        <!-- Campo: Usuario -->
+        <div class="form-group">
+          <label for="usuario" class="form-label">
+            Nombre de usuario
+          </label>
+          <div class="input-wrapper">
+            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <input
+              type="text"
+              id="usuario"
+              name="usuario"
+              class="form-input"
+              placeholder="Ingresa tu usuario"
+              [value]="loginData().usuario"
+              (input)="updateUsuario($any($event.target).value)"
+              [disabled]="isLoading()"
+              autocomplete="username"
+            />
+          </div>
+        </div>
+
+        <!-- Campo: Contraseña -->
+        <div class="form-group">
+          <label for="contrasena" class="form-label">
+            Contraseña
+          </label>
+          <div class="input-wrapper">
+            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              id="contrasena"
+              name="contrasena"
+              class="form-input"
+              placeholder="Ingresa tu contraseña"
+              [value]="loginData().contrasena"
+              (input)="updateContrasena($any($event.target).value)"
+              [disabled]="isLoading()"
+              autocomplete="current-password"
+            />
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="togglePasswordVisibility()"
+              [disabled]="isLoading()"
+            >
+            </button>
+          </div>
+        </div>
+
+        <!-- Recuperar contraseña -->
+        <div class="form-actions">
+          <button 
+            type="button" 
+            class="link-button"
+            (click)="onRecuperarContrasena()"
+            [disabled]="isLoading()"
+          >
+            ¿Olvidaste tu contraseña?
+          </button>
+        </div>
+
+        <!-- Boton principal de login -->
+        <button
+          type="button"
+          class="btn-submit"
+          (click)="onLogin()"
+          [disabled]="isLoading() || !loginData().usuario || !loginData().contrasena"
+        >
+          <span *ngIf="!isLoading()">Iniciar Sesión</span>
+          <span *ngIf="isLoading()" class="loading-spinner">
+            Iniciando sesión...
+          </span>
+        </button>
+
+        <!-- Separador -->
+        <div class="separator">
+          <span>O continúa con</span>
+        </div>
+
+        <!-- Boton de Google -->
+        <button
+          type="button"class="btn-google"(click)="loginWithGoogle()"[disabled]="isLoading()">
+          <span>Iniciar sesión con Google</span>
+        </button>
+
+<<<<<<< HEAD
     <!-- CONTRASEÑA -->
     <div class="campo-formulario">
       <label for="contrasena">Contraseña</label>
@@ -37,8 +148,13 @@
       <small *ngIf="contrasenaInput.invalid && contrasenaInput.touched" class="error">
         La contraseña debe tener al menos 6 caracteres.
       </small>
+=======
+      </div>
+>>>>>>> 2d5e208 (login y pagina principal)
     </div>
+  </div>
 
+<<<<<<< HEAD
     <!-- BOTÓN PRINCIPAL -->
     <button type="submit" class="btn-login" [disabled]="formulario.invalid">
       Iniciar Sesión
@@ -57,3 +173,6 @@
   </form>
 </div>
 
+=======
+</div>
+>>>>>>> 2d5e208 (login y pagina principal)

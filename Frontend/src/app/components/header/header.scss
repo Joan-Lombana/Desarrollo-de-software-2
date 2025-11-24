@@ -1,0 +1,73 @@
+.header {
+  height: 70px;
+  background: #ffffff;
+  border-bottom: 1px solid #e6e6e6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+/* LOGO + TITULO */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo {
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+.text h2 {
+  font-size: 20px;
+  margin: 0;
+}
+.text span {
+  font-size: 12px;
+  color: #5f7161;
+}
+
+/* USUARIO */
+.user {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.logout {
+  padding: 6px 12px;
+  background: #1f8a3e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.logout:hover {
+  background: #176f32;
+}
+
+/* BOTÓN DE MENÚ (MÓVIL) */
+.menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  padding: 4px 10px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 850px) {
+
+  .menu-btn {
+    display: block;
+  }
+
+  .user {
+    display: none;
+  }
+
+}

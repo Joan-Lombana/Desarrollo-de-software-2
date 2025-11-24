@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './mapa.html',
   styleUrls: ['./mapa.scss'],
 })
-export class Mapa implements AfterViewInit {
+export class MapaComponent implements AfterViewInit {
 
   constructor(
     private mapService: LeafletMapService,
@@ -34,5 +34,3 @@ export class Mapa implements AfterViewInit {
     }, 0);
   }
 }
-
-

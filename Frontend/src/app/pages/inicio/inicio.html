@@ -1,29 +1,93 @@
-<div class="contenedor-login">
-    <div class="cuadro-login">
-        <!-- Lado izquierdo - imagen -->
-        <div class="lado-imagen">
-            <div class="logo-header">
-                <img class="logo" src="src/assets/" alt="EcoRuta Logo">
-                <h2>EcoRuta</h2>
-                <p>Sistema de Rutas de recoleccion</p>
-            </div>
-            
-            <div class="ilustracion">
-                <img src="src/assets/Google.png" alt="Imagen reco">
-            </div>
-            
-        </div>
+<div class="landing-page">
+  
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" [class.scrolled]="isScrolled()">
+    <div class="navbar-container">
+      
+      <!-- Nombre -->
+      <div class="nav-brand" (click)="scrollToSection('inicio')">
+        <span class="brand-name">EcoRuta</span>
+      </div>
+      
 
-        <!-- Lado derecho - formulario -->
-        <div class="lado-formulario">
-            <div class="contenido-formulario">
-                <h1 class="titulo-bienvenida">Bienvenido</h1>
-                <p class="subtitulo">Accede al sistema</p>
-
-                <div class="formulario">
-                    <app-login></app-login>
-                </div>
-            </div>
-        </div>
+      <!-- Boton Login -->
+      <button class="btn-login" (click)="openLoginModal()">
+        Iniciar Sesión
+      </button>
     </div>
+
+    <!-- Menú Mobile desplegable -->
+    <div class="mobile-menu" *ngIf="mobileMenuOpen()">
+      <button class="btn-login-mobile" (click)="openLoginModal()">
+        Iniciar Sesión
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========== HERO SECTION ========== -->
+  <section id="inicio" class="hero-section">
+
+    <div class="hero-container">
+      <div class="hero-content">
+        
+        <!-- Título principal -->
+        <h1 class="hero-title">
+          Sabe cuándo pasa el
+          <span class="gradient-text">camión de basura</span>
+        </h1>
+        
+        <!-- Descripción -->
+        <p class="hero-description">
+          Rastreo en tiempo real, notificaciones inteligentes y rutas optimizadas. 
+          Mantén tu ciudad limpia con información precisa.
+        </p>
+
+        <!-- Botones de acción -->
+        <div class="hero-buttons">
+          <button class="btn-primary" (click)="openLoginModal()">
+            Comenzar Ahora
+          </button>
+        </div>
+
+        <!-- Estadísticas - Solo se muestran si hay datos del backend -->
+        <div class="hero-stats" *ngIf="stats().usuariosActivos > 0 || stats().rutasCubiertas > 0">
+          <div class="stat-item">
+            <div class="stat-value">{{ stats().usuariosActivos }}+</div>
+            <div class="stat-label">Usuarios Activos</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">{{ stats().rutasCubiertas }}</div>
+            <div class="stat-label">Rutas Cubiertas</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">{{ stats().satisfaccion }}%</div>
+            <div class="stat-label">Satisfacción</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ilustración del lado derecho (Desktop) -->
+      <div class="hero-illustration">
+        <div class="illustration-card">
+          <div class="card-gradient"></div>
+          <div class="card-icon">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal login-->
+  <div class="login-overlay" *ngIf="showLoginModal()" (click)="closeLoginModal()">
+    <div class="login-modal" (click)="$event.stopPropagation()">
+      
+      <!-- Botón cerrar -->
+      <button class="modal-close" (click)="closeLoginModal()">
+      </button>
+
+      <!-- Componente de login -->
+      <app-login (loginSuccess)="closeLoginModal()"></app-login>
+    </div>
+  </div>
+
 </div>

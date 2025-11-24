@@ -1,1 +1,160 @@
-<p>header works!</p>
+<header class="app-header">
+  <div class="header-container">
+    
+    <!-- Botón toggle sidebar (mobile) -->
+    <button class="sidebar-toggle" (click)="toggleSidebar.emit()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Título de la página actual -->
+    <div class="page-title">
+      <h1>Rastreo de Rutas</h1>
+      <p class="subtitle">Estado en tiempo real de vehículos y rutas</p>
+    </div>
+
+    <!-- Barra de búsqueda -->
+    <div class="search-bar">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <input 
+        type="text" 
+        placeholder="Buscar vehículo, ruta, conductor..."
+        [value]="searchQuery()"
+        (input)="searchQuery.set($any($event.target).value)"
+        (keyup.enter)="onSearch()"
+      />
+    </div>
+
+    <!-- Acciones del header -->
+    <div class="header-actions">
+      
+      <!-- Notificaciones -->
+      <div class="notification-wrapper">
+        <button class="icon-button" (click)="toggleNotifications()" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="badge" *ngIf="unreadCount() > 0">{{ unreadCount() }}</span>
+        </button>
+
+        <!-- Dropdown de notificaciones -->
+        <div class="dropdown notifications-dropdown" *ngIf="showNotifications()">
+          <div class="dropdown-header">
+            <h3>Notificaciones</h3>
+            <button class="link-button" (click)="markAllAsRead()">Marcar todas como leídas</button>
+          </div>
+          <div class="notifications-list">
+            <div 
+              class="notification-item" 
+              *ngFor="let notif of notifications()"
+              [class.unread]="!notif.read"
+              (click)="markAsRead(notif.id)"
+            >
+              <div class="notification-icon" [class]="notif.type">
+                <svg *ngIf="notif.type === 'warning'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <svg *ngIf="notif.type === 'success'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <svg *ngIf="notif.type === 'info'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+              </div>
+              <div class="notification-content">
+                <h4>{{ notif.title }}</h4>
+                <p>{{ notif.message }}</p>
+                <span class="notification-time">{{ notif.time }}</span>
+              </div>
+              <div class="unread-dot" *ngIf="!notif.read"></div>
+            </div>
+          </div>
+          <div class="dropdown-footer">
+            <button class="link-button">Ver todas las notificaciones</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Usuario -->
+      <div class="user-wrapper">
+        <button class="user-button" (click)="toggleUserMenu()">
+          <div class="user-avatar">
+            <span>{{ currentUser()?.usuario?.charAt(0).toUpperCase() || 'A' }}</span>
+          </div>
+          <div class="user-info">
+            <span class="user-name">{{ currentUser()?.usuario || 'Admin' }}</span>
+            <span class="user-role">{{ currentUser()?.rol || 'Administrador' }}</span>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        <!-- Dropdown de usuario -->
+        <div class="dropdown user-dropdown" *ngIf="showUserMenu()">
+          <div class="dropdown-section">
+            <div class="user-profile">
+              <div class="user-avatar large">
+                <span>{{ currentUser()?.usuario?.charAt(0).toUpperCase() || 'A' }}</span>
+              </div>
+              <div>
+                <h3>{{ currentUser()?.usuario || 'Admin' }}</h3>
+                <p>{{ currentUser()?.email || 'admin@ecoruta.com' }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="dropdown-divider"></div>
+          
+          <div class="dropdown-section">
+            <button class="dropdown-item" (click)="goToProfile()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <span>Mi Perfil</span>
+            </button>
+            <button class="dropdown-item" (click)="goToSettings()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M12 1v6m0 6v6m-6-6H0m6 0h6m0-6h6m-6 0v6"></path>
+              </svg>
+              <span>Configuración</span>
+            </button>
+          </div>
+          
+          <div class="dropdown-divider"></div>
+          
+          <div class="dropdown-section">
+            <button class="dropdown-item logout" (click)="logout()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              <span>Cerrar Sesión</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Overlay para cerrar dropdowns -->
+<div 
+  class="dropdown-overlay" 
+  *ngIf="showUserMenu() || showNotifications()"
+  (click)="showUserMenu.set(false); showNotifications.set(false)"
+></div>

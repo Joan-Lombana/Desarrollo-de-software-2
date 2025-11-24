@@ -1,0 +1,75 @@
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  background: #1f2d3a;
+  color: white;
+  padding: 1.5rem 1rem;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: transform 0.25s ease;
+  z-index: 200;
+}
+
+/* ===================
+   MOBILE: sidebar oculto
+   =================== */
+.sidebar:not(.open) {
+  transform: translateX(-250px);
+}
+
+/* ===================
+   Marca
+   =================== */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 1.5rem;
+}
+.logo {
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* ===================
+   Menú
+   =================== */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.menu a {
+  color: #dce4ec;
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.menu a:hover {
+  background: rgba(255,255,255,0.10);
+}
+
+.menu a.active {
+  background: #31a36c;
+  color: white;
+}
+
+/* ===================
+   RESPONSIVE
+   =================== */
+@media (max-width: 850px) {
+  .sidebar {
+    transform: translateX(-250px);
+    position: fixed;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
