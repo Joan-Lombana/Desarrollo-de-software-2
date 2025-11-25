@@ -38,7 +38,7 @@ jobs:
       # -------------------------------
       - name: 🏗️ Compilar Angular
         working-directory: ./Frontend
-        run: npm run build -- --configuration production --base-href /joan_site/
+        run: npm run build -- --configuration production --base-href 
 
 
       # -------------------------------
@@ -62,7 +62,7 @@ jobs:
             ls -l /tmp/eco_frontend/
             mv /tmp/eco_frontend/* /var/www/joan_site/
             chown -R www-data:www-data /var/www/joan_site
-            schmod -R 755 /var/www/joan_site
+            chmod -R 755 /var/www/joan_site
             systemctl restart apache2 || sudo systemctl restart nginx
             echo "✅ Frontend desplegado correctamente."
           '
