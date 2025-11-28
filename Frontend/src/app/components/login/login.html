@@ -1,35 +1,16 @@
-<div class="cuadro-formulario">
-  <h2 class="titulo-formulario">Iniciar Sesión</h2>
+<div class="login-container">
+  <!-- ========== LADO IZQUIERDO: FORMULARIO ========== -->
+  <div class="login-form-side">
+    <div class="form-wrapper">
+      <!-- Logo -->
+      <div class="brand-logo">
+        <h3 class="brand-name">BMArutas</h3>
+      </div>
 
-  <form (ngSubmit)="onLoginLocal()" #formulario="ngForm" novalidate>
-
-    <!-- CORREO -->
-    <div class="campo-formulario">
-      <label for="correo">Correo</label>
-      <input 
-        type="email"
-        id="correo"
-        name="correo"
-        [(ngModel)]="loginData.correo"
-        placeholder="ejemplo@correo.com"
-        required
-        email
-        #correoInput="ngModel"
-      />
-      <small *ngIf="correoInput.invalid && correoInput.touched" class="error">
-        Ingresa un correo válido.
-      </small>
-    </div>
-  </div>
-
-  <!-- ========== LADO DERECHO: FORMULARIO ========== -->
-  <div class="login-right">
-    <div class="form-container">
-      
-      <!-- Header del formulario -->
+      <!-- Título dinámico -->
       <div class="form-header">
-        <h1 class="form-title">Bienvenido</h1>
-        <p class="form-subtitle">Accede al sistema de gestión</p>
+        <h1 class="form-title">{{ mostrarRegistro() ? 'Crear Cuenta' : 'Bienvenido' }}</h1>
+        <p class="form-subtitle">{{ mostrarRegistro() ? 'Empieza tu viaje con nosotros' : 'Inicia sesion para continuar' }}</p>
       </div>
 
       <!-- Mensaje de error -->
@@ -37,142 +18,198 @@
         <span>{{ errorMessage() }}</span>
       </div>
 
-      <!-- Formulario -->
-      <div class="login-form">
-        
-        <!-- Campo: Usuario -->
+      <!-- ============ FORMULARIO DE LOGIN ============ -->
+      <form
+        *ngIf="!mostrarRegistro()"
+        (ngSubmit)="onLogin()"
+        #loginForm="ngForm"
+        class="auth-form"
+      >
+        <!-- Campo: Correo -->
         <div class="form-group">
-          <label for="usuario" class="form-label">
-            Nombre de usuario
-          </label>
-          <div class="input-wrapper">
-            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <input
-              type="text"
-              id="usuario"
-              name="usuario"
-              class="form-input"
-              placeholder="Ingresa tu usuario"
-              [value]="loginData().usuario"
-              (input)="updateUsuario($any($event.target).value)"
-              [disabled]="isLoading()"
-              autocomplete="username"
-            />
-          </div>
+          <label for="correo" class="form-label">Email</label>
+          <input
+            type="email"
+            id="correo"
+            name="correo"
+            class="form-input"
+            placeholder="Enter your email"
+            [(ngModel)]="loginData.correo"
+            [disabled]="isLoading()"
+            required
+            email
+            #correoInput="ngModel"
+            autocomplete="email"
+          />
+          <small *ngIf="correoInput.invalid && correoInput.touched" class="error-text">
+            Please enter a valid email
+          </small>
         </div>
 
         <!-- Campo: Contraseña -->
         <div class="form-group">
-          <label for="contrasena" class="form-label">
-            Contraseña
-          </label>
-          <div class="input-wrapper">
-            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
+          <label for="contrasena" class="form-label">Password</label>
+          <div class="input-password-wrapper">
             <input
               [type]="showPassword() ? 'text' : 'password'"
               id="contrasena"
               name="contrasena"
               class="form-input"
-              placeholder="Ingresa tu contraseña"
-              [value]="loginData().contrasena"
-              (input)="updateContrasena($any($event.target).value)"
+              placeholder="Enter your password"
+              [(ngModel)]="loginData.contrasena"
               [disabled]="isLoading()"
+              required
+              minlength="6"
+              #contrasenaInput="ngModel"
               autocomplete="current-password"
             />
             <button
               type="button"
-              class="toggle-password"
+              class="toggle-password-btn"
               (click)="togglePasswordVisibility()"
               [disabled]="isLoading()"
             >
             </button>
           </div>
+          <small *ngIf="contrasenaInput.invalid && contrasenaInput.touched" class="error-text">
+            Password must be at least 6 characters
+          </small>
         </div>
 
-        <!-- Recuperar contraseña -->
-        <div class="form-actions">
-          <button 
-            type="button" 
-            class="link-button"
-            (click)="onRecuperarContrasena()"
-            [disabled]="isLoading()"
-          >
-            ¿Olvidaste tu contraseña?
-          </button>
-        </div>
-
-        <!-- Boton principal de login -->
-        <button
-          type="button"
-          class="btn-submit"
-          (click)="onLogin()"
-          [disabled]="isLoading() || !loginData().usuario || !loginData().contrasena"
-        >
-          <span *ngIf="!isLoading()">Iniciar Sesión</span>
-          <span *ngIf="isLoading()" class="loading-spinner">
-            Iniciando sesión...
-          </span>
+        <!-- Botón principal de login -->
+        <button type="submit" class="btn-submit" [disabled]="isLoading() || loginForm.invalid">
+          <span *ngIf="!isLoading()">Iniciar Sesion</span>
+          <span *ngIf="isLoading()" class="loading-text">Iniciando sesión...</span>
         </button>
 
-        <!-- Separador -->
+        <!-- Separator -->
         <div class="separator">
-          <span>O continúa con</span>
+          <span>o</span>
         </div>
 
-        <!-- Boton de Google -->
-        <button
-          type="button"class="btn-google"(click)="loginWithGoogle()"[disabled]="isLoading()">
-          <span>Iniciar sesión con Google</span>
+        <!-- Botón de Google -->
+        <button 
+          type="button" 
+          class="btn-google" 
+          (click)="loginWithGoogle()"
+          [disabled]="isLoading()"
+        >
+          <span class="google-icon"></span>
+          <span>Continuar con Google</span>
         </button>
 
-<<<<<<< HEAD
-    <!-- CONTRASEÑA -->
-    <div class="campo-formulario">
-      <label for="contrasena">Contraseña</label>
-      <input 
-        type="password"
-        id="contrasena"
-        name="contrasena"
-        [(ngModel)]="loginData.contrasena"
-        required
-        minlength="6"
-        placeholder="Min 6 caracteres"
-        #contrasenaInput="ngModel"
-      />
-      <small *ngIf="contrasenaInput.invalid && contrasenaInput.touched" class="error">
-        La contraseña debe tener al menos 6 caracteres.
-      </small>
-=======
-      </div>
->>>>>>> 2d5e208 (login y pagina principal)
+        <!-- Toggle a registro -->
+        <p class="toggle-text">
+          ¿No tienes cuenta?
+          <button type="button" class="link-button" (click)="cambiarARegistro()">Regístrate</button>
+        </p>
+      </form>
+
+      <!-- ============ FORMULARIO DE REGISTRO ============ -->
+      <form
+        *ngIf="mostrarRegistro()"
+        (ngSubmit)="onRegistro()"
+        #registroForm="ngForm"
+        class="auth-form"
+      >
+        <!-- Campo: Nombre -->
+        <div class="form-group">
+          <label for="nombre" class="form-label">Full name</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            class="form-input"
+            placeholder="Enter your full name"
+            [(ngModel)]="registroData.nombre"
+            [disabled]="isLoading()"
+            required
+            #nombreInput="ngModel"
+          />
+          <small *ngIf="nombreInput.invalid && nombreInput.touched" class="error-text">
+            Name is required
+          </small>
+        </div>
+
+        <!-- Campo: Correo -->
+        <div class="form-group">
+          <label for="correo-registro" class="form-label">Email</label>
+          <input
+            type="email"
+            id="correo-registro"
+            name="correo"
+            class="form-input"
+            placeholder="Enter your email"
+            [(ngModel)]="registroData.correo"
+            [disabled]="isLoading()"
+            required
+            email
+            #correoRegistroInput="ngModel"
+            autocomplete="email"
+          />
+          <small
+            *ngIf="correoRegistroInput.invalid && correoRegistroInput.touched"
+            class="error-text"
+          >
+            Please enter a valid email
+          </small>
+        </div>
+
+        <!-- Campo: Contraseña -->
+        <div class="form-group">
+          <label for="contrasena-registro" class="form-label">Password</label>
+          <div class="input-password-wrapper">
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              id="contrasena-registro"
+              name="contrasena"
+              class="form-input"
+              placeholder="Create a password"
+              [(ngModel)]="registroData.contrasena"
+              [disabled]="isLoading()"
+              required
+              minlength="6"
+              #contrasenaRegistroInput="ngModel"
+              autocomplete="new-password"
+            />
+            <button
+              type="button"
+              class="toggle-password-btn"
+              (click)="togglePasswordVisibility()"
+              [disabled]="isLoading()"
+            >
+            </button>
+          </div>
+          <small
+            *ngIf="contrasenaRegistroInput.invalid && contrasenaRegistroInput.touched"
+            class="error-text"
+          >
+            Password must be at least 6 characters
+          </small>
+        </div>
+
+        <!-- Botón de registro -->
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="isLoading() || registroForm.invalid"
+        >
+          <span *ngIf="!isLoading()">Crear Cuenta</span>
+          <span *ngIf="isLoading()" class="loading-text">Creando cuenta...</span>
+        </button>
+
+        <!-- Toggle a login -->
+        <p class="toggle-text">
+          ¿Ya tienes cuenta?
+          <button type="button" class="link-button" (click)="cambiarALogin()">Inicia sesión</button>
+        </p>
+      </form>
     </div>
   </div>
 
-<<<<<<< HEAD
-    <!-- BOTÓN PRINCIPAL -->
-    <button type="submit" class="btn-login" [disabled]="formulario.invalid">
-      Iniciar Sesión
-    </button>
-
-    <!-- Separador -->
-    <div class="separador">
-      <span>O</span>
+  <!-- ========== LADO DERECHO: IMAGEN ========== -->
+  <div class="login-image-side">
+    <div class="image-overlay">
     </div>
-
-    <!-- Google -->
-    <button type="button" class="btn-google" (click)="loginGoogle()">
-      Iniciar con Google
-    </button>
-
-  </form>
+  </div>
 </div>
-
-=======
-</div>
->>>>>>> 2d5e208 (login y pagina principal)

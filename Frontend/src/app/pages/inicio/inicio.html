@@ -4,85 +4,53 @@
   <nav class="navbar" [class.scrolled]="isScrolled()">
     <div class="navbar-container">
       
-      <!-- Nombre -->
-      <div class="nav-brand" (click)="scrollToSection('inicio')">
+      <!-- Logo y Nombre -->
+      <div class="nav-brand">
         <span class="brand-name">EcoRuta</span>
       </div>
-      
-
-      <!-- Boton Login -->
-      <button class="btn-login" (click)="openLoginModal()">
-        Iniciar Sesión
-      </button>
-    </div>
-
-    <!-- Menú Mobile desplegable -->
-    <div class="mobile-menu" *ngIf="mobileMenuOpen()">
-      <button class="btn-login-mobile" (click)="openLoginModal()">
-        Iniciar Sesión
-      </button>
     </div>
   </nav>
 
   <!-- ========== HERO SECTION ========== -->
   <section id="inicio" class="hero-section">
+    <!-- Imagen de fondo -->
+    <div class="hero-background"></div>
+    
+    <!-- Overlay oscuro -->
+    <div class="hero-overlay"></div>
 
     <div class="hero-container">
       <div class="hero-content">
         
         <!-- Título principal -->
         <h1 class="hero-title">
-          Sabe cuándo pasa el
-          <span class="gradient-text">camión de basura</span>
+          Texto 1 aqui
+          <span class="gradient-text">otro txto jajjaa</span>
         </h1>
         
-        <!-- Descripción -->
+        <!-- Descripcion -->
         <p class="hero-description">
           Rastreo en tiempo real, notificaciones inteligentes y rutas optimizadas. 
-          Mantén tu ciudad limpia con información precisa.
+          Mantén tu ciudad limpia.
         </p>
 
-        <!-- Botones de acción -->
+        <!-- boton de accion -->
         <div class="hero-buttons">
           <button class="btn-primary" (click)="openLoginModal()">
             Comenzar Ahora
           </button>
         </div>
-
-        <!-- Estadísticas - Solo se muestran si hay datos del backend -->
-        <div class="hero-stats" *ngIf="stats().usuariosActivos > 0 || stats().rutasCubiertas > 0">
-          <div class="stat-item">
-            <div class="stat-value">{{ stats().usuariosActivos }}+</div>
-            <div class="stat-label">Usuarios Activos</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value">{{ stats().rutasCubiertas }}</div>
-            <div class="stat-label">Rutas Cubiertas</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value">{{ stats().satisfaccion }}%</div>
-            <div class="stat-label">Satisfacción</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Ilustración del lado derecho (Desktop) -->
-      <div class="hero-illustration">
-        <div class="illustration-card">
-          <div class="card-gradient"></div>
-          <div class="card-icon">
-          </div>
-        </div>
       </div>
     </div>
   </section>
 
-  <!-- Modal login-->
+  <!-- ========== MODAL LOGIN ========== -->
   <div class="login-overlay" *ngIf="showLoginModal()" (click)="closeLoginModal()">
     <div class="login-modal" (click)="$event.stopPropagation()">
       
-      <!-- Botón cerrar -->
+      <!-- Boton cerrar -->
       <button class="modal-close" (click)="closeLoginModal()">
+        ✕
       </button>
 
       <!-- Componente de login -->

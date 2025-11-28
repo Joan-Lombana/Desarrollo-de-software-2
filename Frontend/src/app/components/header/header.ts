@@ -1,4 +1,4 @@
-import { Component, inject, signal, output } from '@angular/core';
+import { Component, inject, signal, output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
@@ -10,7 +10,7 @@ import { AuthService } from '../../services/auth';
   templateUrl: './header.html',
   styleUrl: './header.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -56,6 +56,14 @@ export class HeaderComponent {
   // Contador de notificaciones sin leer
   unreadCount = signal(2);
 
+  ngOnInit() {
+    if (!this.authService.currentUser()) {
+      this.authService.getProfile().subscribe({
+        error: () => console.log('No active session')
+      });
+    }
+  }
+
   onSearch() {
     console.log('Buscando:', this.searchQuery());
     // TODO: Implementar búsqueda
@@ -95,7 +103,9 @@ export class HeaderComponent {
   }
 
   logout() {
-    this.authService.logout();
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/login']);
+    });
   }
 
   goToProfile() {
