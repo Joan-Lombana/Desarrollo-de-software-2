@@ -1,5 +1,4 @@
-import { Component, signal, OnInit, inject } from '@angular/core';
-
+import { Component, signal, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { HeaderComponent } from '../../components/header/header';
@@ -79,6 +78,14 @@ interface FormDireccion {
 export class PrincipalComponent implements OnInit {
   private router = inject(Router);
 
+  //dibujar mapa
+  @ViewChild(MapaComponent)
+  mapa!: MapaComponent;
+
+  activarDibujo() {
+    this.mapa.startDrawing();
+  }
+ 
   // Estado del sidebar
   sidebarOpen = signal(true);
   

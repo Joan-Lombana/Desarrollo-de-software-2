@@ -16,10 +16,28 @@ export class MapaComponent implements AfterViewInit {
     private http: HttpClient
   ) {}
 
+  //dibujar mapa
+  startDrawing() {
+  this.mapService.enableDrawing();  
+  } 
+
+  //guardar mapa
+  saveRoute() {
+  const geojson = this.mapService.getDrawnRouteGeoJSON();
+
+  this.http.post('http://localhost:3000/apilucio/rutas/guardar', {
+    perfil_id: '18851282-1a08-42b7-9384-243cc2ead349',
+    shape: geojson
+  }).subscribe(res => {
+    console.log("Ruta guardada", res);
+  });
+}
   ngAfterViewInit(): void {
     // 🔹 Asegurarse de que el mapa se cargue después de renderizar el DOM
     setTimeout(() => {
       this.mapService.initMap('map');
+
+    
 
       // 🔹 Llamada HTTP
       this.http.post<any[]>('http://localhost:3000/apilucio/rutas', {
