@@ -1,9 +1,9 @@
 <div class="landing-page">
-  
+
   <!-- ========== NAVBAR ========== -->
   <nav class="navbar" [class.scrolled]="isScrolled()">
     <div class="navbar-container">
-      
+
       <!-- Logo y Nombre -->
       <div class="nav-brand">
         <span class="brand-name">EcoRuta</span>
@@ -15,22 +15,22 @@
   <section id="inicio" class="hero-section">
     <!-- Imagen de fondo -->
     <div class="hero-background"></div>
-    
+
     <!-- Overlay oscuro -->
     <div class="hero-overlay"></div>
 
     <div class="hero-container">
       <div class="hero-content">
-        
+
         <!-- Título principal -->
         <h1 class="hero-title">
           Texto 1 aqui
           <span class="gradient-text">otro txto jajjaa</span>
         </h1>
-        
+
         <!-- Descripcion -->
         <p class="hero-description">
-          Rastreo en tiempo real, notificaciones inteligentes y rutas optimizadas. 
+          Rastreo en tiempo real, notificaciones inteligentes y rutas optimizadas.
           Mantén tu ciudad limpia.
         </p>
 
@@ -45,17 +45,17 @@
   </section>
 
   <!-- ========== MODAL LOGIN ========== -->
-  <div class="login-overlay" *ngIf="showLoginModal()" (click)="closeLoginModal()">
-    <div class="login-modal" (click)="$event.stopPropagation()">
-      
-      <!-- Boton cerrar -->
-      <button class="modal-close" (click)="closeLoginModal()">
-        ✕
-      </button>
-
-      <!-- Componente de login -->
-      <app-login (loginSuccess)="closeLoginModal()"></app-login>
+  @if (showLoginModal()) {
+    <div class="login-overlay" (click)="closeLoginModal()">
+      <div class="login-modal" (click)="$event.stopPropagation()">
+        <!-- Boton cerrar -->
+        <button class="modal-close" (click)="closeLoginModal()">
+          ✕
+        </button>
+        <!-- Componente de login -->
+        <app-login (loginSuccess)="closeLoginModal()"></app-login>
+      </div>
     </div>
-  </div>
+  }
 
 </div>

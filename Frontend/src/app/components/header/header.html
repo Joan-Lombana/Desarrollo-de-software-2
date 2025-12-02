@@ -1,6 +1,6 @@
 <header class="app-header">
   <div class="header-container">
-    
+
     <!-- Botón toggle sidebar (mobile) -->
     <button class="sidebar-toggle" (click)="toggleSidebar.emit()">
       <i class="fa-solid fa-bars"></i>
@@ -15,114 +15,127 @@
     <!-- Barra de búsqueda -->
     <div class="search-bar">
       <i class="search-icon fa-solid fa-magnifying-glass"></i>
-      <input 
-        type="text" 
+      <input
+        type="text"
         placeholder="Buscar vehículo, ruta, conductor..."
         [value]="searchQuery()"
         (input)="searchQuery.set($any($event.target).value)"
         (keyup.enter)="onSearch()"
-      />
-    </div>
-
-    <!-- Acciones del header -->
-    <div class="header-actions">
-      
-      <!-- Notificaciones -->
-      <div class="notification-wrapper">
-        <button class="icon-button" (click)="toggleNotifications()" type="button">
-          <i class="fa-regular fa-bell"></i>
-          <span class="badge" *ngIf="unreadCount() > 0">{{ unreadCount() }}</span>
-        </button>
-
-        <!-- Dropdown de notificaciones -->
-        <div class="dropdown notifications-dropdown" *ngIf="showNotifications()">
-          <div class="dropdown-header">
-            <h3>Notificaciones</h3>
-            <button class="link-button" (click)="markAllAsRead()">Marcar todas como leídas</button>
-          </div>
-          <div class="notifications-list">
-            <div 
-              class="notification-item" 
-              *ngFor="let notif of notifications()"
-              [class.unread]="!notif.read"
-              (click)="markAsRead(notif.id)"
-            >
-              <div class="notification-icon" [class]="notif.type">
-                <i *ngIf="notif.type === 'warning'" class="fa-solid fa-triangle-exclamation"></i>
-                <i *ngIf="notif.type === 'success'" class="fa-solid fa-check"></i>
-                <i *ngIf="notif.type === 'info'" class="fa-solid fa-circle-info"></i>
-              </div>
-              <div class="notification-content">
-                <h4>{{ notif.title }}</h4>
-                <p>{{ notif.message }}</p>
-                <span class="notification-time">{{ notif.time }}</span>
-              </div>
-              <div class="unread-dot" *ngIf="!notif.read"></div>
-            </div>
-          </div>
-          <div class="dropdown-footer">
-            <button class="link-button">Ver todas las notificaciones</button>
-          </div>
-        </div>
+        />
       </div>
 
-      <!-- Usuario -->
-      <div class="user-wrapper" *ngIf="currentUser()">
-        <button class="user-button" (click)="toggleUserMenu()">
-          <div class="user-avatar">
-            <span>{{ currentUser().nombre?.charAt(0).toUpperCase() }}</span>
-          </div>
-          <div class="user-info">
-            <span class="user-name">{{ currentUser().nombre }}</span>
-            <span class="user-role">{{ currentUser().rol || 'Usuario' }}</span>
-          </div>
-          <i class="fa-solid fa-chevron-down"></i>
-        </button>
+      <!-- Acciones del header -->
+      <div class="header-actions">
 
-        <!-- Dropdown de usuario -->
-        <div class="dropdown user-dropdown" *ngIf="showUserMenu()">
-          <div class="dropdown-section">
-            <div class="user-profile">
-              <div class="user-avatar large">
+        <!-- Notificaciones -->
+        <div class="notification-wrapper">
+          <button class="icon-button" (click)="toggleNotifications()" type="button">
+            <i class="fa-regular fa-bell"></i>
+            @if (unreadCount() > 0) {
+              <span class="badge">{{ unreadCount() }}</span>
+            }
+          </button>
+
+          <!-- Dropdown de notificaciones -->
+          @if (showNotifications()) {
+            <div class="dropdown notifications-dropdown">
+              <div class="dropdown-header">
+                <h3>Notificaciones</h3>
+                <button class="link-button" (click)="markAllAsRead()">Marcar todas como leídas</button>
+              </div>
+              <div class="notifications-list">
+                @for (notif of notifications(); track notif) {
+                  <div
+                    class="notification-item"
+                    [class.unread]="!notif.read"
+                    (click)="markAsRead(notif.id)"
+                    >
+                    <div class="notification-icon" [class]="notif.type">
+                      @if (notif.type === 'warning') {
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                      }
+                      @if (notif.type === 'success') {
+                        <i class="fa-solid fa-check"></i>
+                      }
+                      @if (notif.type === 'info') {
+                        <i class="fa-solid fa-circle-info"></i>
+                      }
+                    </div>
+                    <div class="notification-content">
+                      <h4>{{ notif.title }}</h4>
+                      <p>{{ notif.message }}</p>
+                      <span class="notification-time">{{ notif.time }}</span>
+                    </div>
+                    @if (!notif.read) {
+                      <div class="unread-dot"></div>
+                    }
+                  </div>
+                }
+              </div>
+              <div class="dropdown-footer">
+                <button class="link-button">Ver todas las notificaciones</button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Usuario -->
+        @if (currentUser()) {
+          <div class="user-wrapper">
+            <button class="user-button" (click)="toggleUserMenu()">
+              <div class="user-avatar">
                 <span>{{ currentUser().nombre?.charAt(0).toUpperCase() }}</span>
               </div>
-              <div>
-                <h3>{{ currentUser().nombre }}</h3>
-                <p>{{ currentUser().correo }}</p>
+              <div class="user-info">
+                <span class="user-name">{{ currentUser().nombre }}</span>
+                <span class="user-role">{{ currentUser().rol || 'Usuario' }}</span>
               </div>
-            </div>
-          </div>
-          
-          <div class="dropdown-divider"></div>
-          
-          <div class="dropdown-section">
-            <button class="dropdown-item" (click)="goToProfile()">
-              <i class="fa-regular fa-user"></i>
-              <span>Mi Perfil</span>
+              <i class="fa-solid fa-chevron-down"></i>
             </button>
-            <button class="dropdown-item" (click)="goToSettings()">
-              <i class="fa-solid fa-gear"></i>
-              <span>Configuración</span>
-            </button>
+            <!-- Dropdown de usuario -->
+            @if (showUserMenu()) {
+              <div class="dropdown user-dropdown">
+                <div class="dropdown-section">
+                  <div class="user-profile">
+                    <div class="user-avatar large">
+                      <span>{{ currentUser().nombre?.charAt(0).toUpperCase() }}</span>
+                    </div>
+                    <div>
+                      <h3>{{ currentUser().nombre }}</h3>
+                      <p>{{ currentUser().correo }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-section">
+                  <button class="dropdown-item" (click)="goToProfile()">
+                    <i class="fa-regular fa-user"></i>
+                    <span>Mi Perfil</span>
+                  </button>
+                  <button class="dropdown-item" (click)="goToSettings()">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Configuración</span>
+                  </button>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-section">
+                  <button class="dropdown-item logout" (click)="logout()">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Cerrar Sesión</span>
+                  </button>
+                </div>
+              </div>
+            }
           </div>
-          
-          <div class="dropdown-divider"></div>
-          
-          <div class="dropdown-section">
-            <button class="dropdown-item logout" (click)="logout()">
-              <i class="fa-solid fa-arrow-right-from-bracket"></i>
-              <span>Cerrar Sesión</span>
-            </button>
-          </div>
-        </div>
+        }
       </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<!-- Overlay para cerrar dropdowns -->
-<div 
-  class="dropdown-overlay" 
-  *ngIf="showUserMenu() || showNotifications()"
-  (click)="showUserMenu.set(false); showNotifications.set(false)"
-></div>
+  <!-- Overlay para cerrar dropdowns -->
+  @if (showUserMenu() || showNotifications()) {
+    <div
+      class="dropdown-overlay"
+      (click)="showUserMenu.set(false); showNotifications.set(false)"
+    ></div>
+  }

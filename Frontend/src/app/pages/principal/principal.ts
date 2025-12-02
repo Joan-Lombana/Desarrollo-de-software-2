@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HeaderComponent } from '../../components/header/header';
 import { SidebarComponent } from '../../components/sidebar/sidebar';
 import { MapaComponent } from '../../components/mapa/mapa';
+import { Herramientasmapa } from '../../components/herramientasmapa/herramientasmapa';
 
 interface Ruta {
   id: number;
@@ -71,20 +72,14 @@ interface FormDireccion {
 @Component({
   selector: 'app-principal',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, SidebarComponent, MapaComponent],
+  imports: [HeaderComponent, SidebarComponent, MapaComponent, CommonModule, Herramientasmapa],
   templateUrl: './principal.html',
   styleUrls: ['./principal.scss']
 })
 export class PrincipalComponent implements OnInit {
   private router = inject(Router);
 
-  //dibujar mapa
-  @ViewChild(MapaComponent)
-  mapa!: MapaComponent;
-
-  activarDibujo() {
-    this.mapa.startDrawing();
-  }
+ 
  
   // Estado del sidebar
   sidebarOpen = signal(true);

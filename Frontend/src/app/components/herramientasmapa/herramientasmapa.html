@@ -1,0 +1,40 @@
+<div class="map-container">
+  <div id="map" class="map"></div>
+
+  <div class="tool-panel-horizontal">
+    <div 
+        class="tool-item" 
+        (click)="toggleDrawing(); onToolClick($event)" 
+        [class.active]="modoDibujo" 
+        title="Seleccionar puntos">
+        <img src="seleccionar.png" alt="Seleccionar">
+    </div>
+
+
+    <div class="tool-item" (click)="undoPoint()" title="Revertir">
+      <img src="back.png" alt="Retroceder">
+      
+    </div>
+
+    <div class="tool-item" (click)="makeRoute()" title="Generar ruta">
+      <img src="crear.png" alt="Ruta">
+      
+    </div>
+
+    <div class="tool-item" (click)="openSaveModal()" [class.disabled]="!routeReady()" title="Guardar ruta">
+      <img src="guardar.png" alt="Guardar">
+      
+    </div>
+  </div>
+</div>
+
+<div class="save-modal" *ngIf="showSaveModal" (click)="closeSaveModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Nombre de la ruta</h3>
+    <input type="text" [(ngModel)]="nombreRuta" placeholder="Ej: Ruta Zona Norte">
+
+    <button class="btn-confirm" (click)="saveRoute()">Guardar</button>
+  </div>
+</div>
+
+

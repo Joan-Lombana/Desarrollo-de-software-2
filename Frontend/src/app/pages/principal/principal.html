@@ -24,7 +24,7 @@
         
         <!-- Quick Actions -->
         <div class="quick-actions">
-          <button class="btn-action primary" (click)="activarDibujo()">
+          <button class="btn-action primary" (click)="abrirModalRegistrarRuta()">
             <i class="fa-solid fa-plus"></i>
             Registrar Ruta
           </button>
@@ -38,7 +38,6 @@
           </button>
         </div>
       </div>
-
       <!-- Stats Cards -->
       <div class="stats-grid">
         <div class="stat-card green">
@@ -89,15 +88,17 @@
           </div>
         </div>
       </div>
-
+       
       <!-- Main Grid -->
       <div class="content-grid">
         
+   
         <!-- Map Section -->
         <section class="map-section">
           <div class="section-card">
             <div class="card-header">
               <h2>Mapa en Tiempo Real</h2>
+              
               <div class="header-actions">
                 <select class="select-route">
                   <option value="">Todas las rutas</option>

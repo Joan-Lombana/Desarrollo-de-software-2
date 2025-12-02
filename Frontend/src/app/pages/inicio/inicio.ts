@@ -1,11 +1,11 @@
 import { Component, signal, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { LoginComponent } from '../../components/login/login';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule, LoginComponent],
+  imports: [LoginComponent],
   templateUrl: './inicio.html',
   styleUrl: './inicio.scss'
 })
