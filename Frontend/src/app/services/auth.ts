@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
@@ -38,11 +38,16 @@ export class AuthService {
     );
   }
 
-  logout(): Observable<any> {
-    return this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).pipe(
-      tap(() => {
-        this.currentUser.set(null);
-      })
-    );
-  }
+logout(): Observable<boolean> {
+  // Llamada al backend para cerrar sesión
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+
+  // Limpiamos la señal del usuario
+  this.currentUser.set(null);
+
+  // Retornamos un observable para que .subscribe() funcione
+  return of(true);
+}
+
 }

@@ -117,8 +117,10 @@ $hover-bg: #f9fafb;
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;      // espacio entre campana y perfil
+  margin-left: auto;   // empuja todo hacia la derecha
 }
+
 
 /* Notifications */
 .notification-wrapper {
@@ -177,29 +179,39 @@ $hover-bg: #f9fafb;
       background: $hover-bg;
     }
 
+    /* Avatar circular o con ícono */
     .user-avatar {
       width: 36px;
       height: 36px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, $accent-color, color.adjust($accent-color, $lightness: -10%));
-      color: white;
+      border-radius: 50%; // Para que se vea circular con el ícono
+      background: #e5e5e5; // Fondo neutro
+      color: #333; // Color del ícono
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 600;
       font-size: 1rem;
-      box-shadow: 0 2px 5px rgba(16, 185, 129, 0.2);
 
+      /* Ajuste para ícono nuevo */
+      i {
+        font-size: 1.2rem; // Tamaño más grande para el ícono
+      }
+
+      /* Versión grande en el dropdown */
       &.large {
         width: 48px;
         height: 48px;
-        font-size: 1.2rem;
+        font-size: 1.4rem;
+
+        i {
+          font-size: 1.8rem;
+        }
       }
     }
 
     .user-info {
       text-align: left;
-      display: none; // Hide on mobile
+      display: flex; //  on mobile
 
       @media (min-width: 768px) {
         display: flex;
@@ -218,6 +230,7 @@ $hover-bg: #f9fafb;
     }
   }
 }
+
 
 /* Dropdowns (Common) */
 .dropdown {

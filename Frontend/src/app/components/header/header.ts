@@ -8,7 +8,7 @@ import { AuthService } from '../../services/auth';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './header.html',
-  styleUrl: './header.scss'
+  styleUrls: ['./header.scss']
 })
 export class HeaderComponent implements OnInit {
   private authService = inject(AuthService);
@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
   showNotifications = signal(false);
   
   // Datos del usuario desde el servicio de auth
-  currentUser = this.authService.currentUser;
+  //currentUser = this.authService.currentUser;
   
   // Notificaciones simuladas (luego vendrán del backend)
   notifications = signal([
@@ -49,6 +49,13 @@ export class HeaderComponent implements OnInit {
       read: true
     }
   ]);
+
+  currentUser = signal({
+  nombre: "Estefany",
+  correo: "estefany@test.com",
+  rol: "Admin"
+  });
+
 
   // Output para toggle del sidebar en mobile
   toggleSidebar = output<void>();
@@ -102,11 +109,19 @@ export class HeaderComponent implements OnInit {
     this.unreadCount.set(unread);
   }
 
-  logout() {
-    this.authService.logout().subscribe(() => {
-      this.router.navigate(['/login']);
-    });
-  }
+logout() {
+  this.authService.logout().subscribe({
+    next: () => {
+      this.router.navigate(['/inicio']);
+      this.showUserMenu.set(false);
+    },
+    error: () => {
+      // Incluso si hay error, navegar igual al inicio
+      this.router.navigate(['/inicio']);
+    }
+  });
+}
+
 
   goToProfile() {
     this.showUserMenu.set(false);

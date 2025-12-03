@@ -69,9 +69,12 @@
       <!-- Usuario -->
       <div class="user-wrapper" *ngIf="currentUser()">
         <button class="user-button" (click)="toggleUserMenu()">
+          
+          <!-- ICONO DE PERFIL (NO INICIAL, NO IMAGEN) -->
           <div class="user-avatar">
-            <span>{{ currentUser().nombre?.charAt(0).toUpperCase() }}</span>
+            <i class="fa-regular fa-user"></i>
           </div>
+
           <div class="user-info">
             <span class="user-name">{{ currentUser().nombre }}</span>
             <span class="user-role">{{ currentUser().rol || 'Usuario' }}</span>
@@ -83,28 +86,33 @@
         <div class="dropdown user-dropdown" *ngIf="showUserMenu()">
           <div class="dropdown-section">
             <div class="user-profile">
+
+              <!--ICONO GRANDE EN EL DROPDOWN -->
               <div class="user-avatar large">
-                <span>{{ currentUser().nombre?.charAt(0).toUpperCase() }}</span>
+                <i class="fa-regular fa-user"></i>
               </div>
+
               <div>
-                <h3>{{ currentUser().nombre }}</h3>
-                <p>{{ currentUser().correo }}</p>
+                <h3>{{ currentUser()?.nombre }}</h3>
+                <p>{{ currentUser()?.correo }}</p>
               </div>
             </div>
           </div>
           
           <div class="dropdown-divider"></div>
           
-          <div class="dropdown-section">
-            <button class="dropdown-item" (click)="goToProfile()">
-              <i class="fa-regular fa-user"></i>
-              <span>Mi Perfil</span>
-            </button>
-            <button class="dropdown-item" (click)="goToSettings()">
-              <i class="fa-solid fa-gear"></i>
-              <span>Configuración</span>
-            </button>
-          </div>
+        <div class="dropdown-section">
+          <button class="dropdown-item" (click)="goToProfile()">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Política de Privacidad</span>
+          </button>
+
+          <button class="dropdown-item" (click)="goToSettings()">
+            <i class="fa-solid fa-file-contract"></i>
+            <span>Términos del Servicio</span>
+          </button>
+        </div>
+
           
           <div class="dropdown-divider"></div>
           
