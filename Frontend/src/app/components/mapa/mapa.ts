@@ -1,7 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { LeafletMapService } from '../../services/leaflet-map';
+import { LeafletMapService } from '../../services/leaflet-map.services';
 import { HttpClient } from '@angular/common/http';
-
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-mapa',
@@ -12,29 +12,30 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MapaComponent implements AfterViewInit {
 
+  private rutasUrl = `${environment.apiUrl}/operativo/rutas`;
+
   constructor(
     private mapService: LeafletMapService,
     private http: HttpClient
   ) {}
 
- 
-
   ngAfterViewInit(): void {
-    // Asegurar que el mapa se inicie cuando el DOM ya esté renderizado
+
     setTimeout(() => {
       this.mapService.initMap('map');
 
-      // Cargar rutas del backend
-      this.http.post<any[]>('http://localhost:3000/apilucio/rutas', {
-        perfil_id: '18851282-1a08-42b7-9384-243cc2ead349',
-      }).subscribe(rutas => {
-        rutas.forEach(ruta => {
-          if (ruta.shape) {
-            this.mapService.addGeoJsonLayer(ruta.shape);
-          }
-        });
-      });
-
+      // Cargar rutas desde backend
+      this.http.get<any[]>(this.rutasUrl, { params: { perfil_id: '18851282-1a08-42b7-9384-243cc2ead349' } })
+  .subscribe(rutas => {
+    rutas.forEach(ruta => {
+      if (ruta.shape) {
+        this.mapService.addGeoJsonLayer(
+          typeof ruta.shape === "string" ? JSON.parse(ruta.shape) : ruta.shape
+        );
+      }
+    });
+  });
     }, 0);
   }
 }
+

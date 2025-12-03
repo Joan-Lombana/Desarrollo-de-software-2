@@ -28,7 +28,9 @@
   </div>
 </div>
 
-<div class="save-modal" *ngIf="showSaveModal" (click)="closeSaveModal()">
+<div class="save-modal" *ngIf="showSaveModal">
+  <div class="modal-overlay" (click)="closeSaveModal()"></div>
+
   <div class="modal-content" (click)="$event.stopPropagation()">
     <h3>Nombre de la ruta</h3>
     <input type="text" [(ngModel)]="nombreRuta" placeholder="Ej: Ruta Zona Norte">
@@ -36,5 +38,6 @@
     <button class="btn-confirm" (click)="saveRoute()">Guardar</button>
   </div>
 </div>
+
 
 

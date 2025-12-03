@@ -1,7 +1,7 @@
 import { Component, inject, signal, output, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth';
+import { AuthService } from '../../services/auth.services';
 
 @Component({
   selector: 'app-header',

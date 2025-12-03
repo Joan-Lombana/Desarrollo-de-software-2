@@ -5,6 +5,7 @@ import { HeaderComponent } from '../../components/header/header';
 import { SidebarComponent } from '../../components/sidebar/sidebar';
 import { MapaComponent } from '../../components/mapa/mapa';
 import { Herramientasmapa } from '../../components/herramientasmapa/herramientasmapa';
+import { VehiculosService } from '../../services/vehiculos.services';
 
 interface Ruta {
   id: number;
@@ -19,12 +20,11 @@ interface Ruta {
 interface Vehiculo {
   id: string;
   placa: string;
-  capacidad: number;
-  estado: 'En ruta' | 'En espera' | 'Mantenimiento';
-  conductor: string;
-  rutaActual?: string;
-  ubicacion?: { lat: number; lng: number };
+  modelo: string;
+  marca: string;
+  activo: boolean;
 }
+
 
 interface Aviso {
   id: number;
@@ -51,10 +51,11 @@ interface FormRuta {
 
 interface FormVehiculo {
   placa: string;
-  capacidad: number;
-  conductor: string;
-  estado: 'En ruta' | 'En espera' | 'Mantenimiento';
+  modelo: string;
+  marca: string;
+  activo: boolean;
 }
+
 
 interface Direccion {
   direccion: string;
@@ -78,6 +79,7 @@ interface FormDireccion {
 })
 export class PrincipalComponent implements OnInit {
   private router = inject(Router);
+  private vehiculosService = inject(VehiculosService);
 
  
  
@@ -94,7 +96,14 @@ export class PrincipalComponent implements OnInit {
   
   // Datos de formularios
   formRuta = signal<FormRuta>({ nombre: '', zona: '', horario: '' });
-  formVehiculo = signal<FormVehiculo>({ placa: '', capacidad: 0, conductor: '', estado: 'En espera' });
+  
+  formVehiculo = signal<FormVehiculo>({
+  placa: '',
+  modelo: '',
+  marca: '',
+  activo: true
+});
+
   formDireccion = signal<FormDireccion>({ rutaId: 0, direccion: '', orden: 1 });
   
   // Datos (TODO: vienen del backend)
@@ -102,11 +111,11 @@ export class PrincipalComponent implements OnInit {
   vehiculos = signal<Vehiculo[]>([]);
   avisos = signal<Aviso[]>([]);
   stats = signal<Stats>({
-    vehiculosActivos: 0,
-    rutasCompletadas: 0,
-    eficiencia: 0,
-    kmRecorridos: 0,
-    kgRecolectados: 0
+  vehiculosActivos: 0,
+  rutasCompletadas: 0,
+  eficiencia: 0,
+  kmRecorridos: 0,
+  kgRecolectados: 0
   });
 
   ngOnInit() {
@@ -155,43 +164,23 @@ export class PrincipalComponent implements OnInit {
   }
 
   private cargarVehiculos() {
-    const vehiculosData: Vehiculo[] = [
-      {
-        id: '1',
-        placa: 'ABC-123',
-        capacidad: 68,
-        estado: 'En ruta',
-        conductor: 'J. Pérez',
-        rutaActual: 'Ruta Norte',
-        ubicacion: { lat: 3.42158, lng: -76.5205 }
-      },
-      {
-        id: '2',
-        placa: 'XYZ-789',
-        capacidad: 45,
-        estado: 'En espera',
-        conductor: 'M. González',
-        ubicacion: { lat: 3.43158, lng: -76.5305 }
-      },
-      {
-        id: '3',
-        placa: 'DEF-456',
-        capacidad: 90,
-        estado: 'En ruta',
-        conductor: 'L. Ramírez',
-        rutaActual: 'Ruta Centro',
-        ubicacion: { lat: 3.41158, lng: -76.5105 }
+  const perfilId = 'bcadd725-99a9-458f-bb7f-2eea173c0eb3'; 
+
+  this.vehiculosService.getVehiculos(perfilId).subscribe({
+    next: (resp: any) => {
+      console.log("📥 Vehículos recibidos desde backend:", resp);
+      this.vehiculos.set(resp);
+      if (resp.length > 0) {
+        this.vehiculoSeleccionado.set(resp[0]);
       }
-    ];
-    
-    this.vehiculos.set(vehiculosData);
-    
-    // Seleccionar el primer vehículo activo
-    const primerActivo = vehiculosData.find(v => v.estado === 'En ruta');
-    if (primerActivo) {
-      this.vehiculoSeleccionado.set(primerActivo);
+    },
+    error: (err) => {
+      console.error("❌ Error cargando vehículos:", err);
     }
+  });
   }
+
+
 
   private cargarAvisos() {
     this.avisos.set([
@@ -261,9 +250,9 @@ export class PrincipalComponent implements OnInit {
     return this.avisos().filter(a => !a.leido);
   }
 
-  get vehiculosEnRuta() {
-    return this.vehiculos().filter(v => v.estado === 'En ruta').length;
-  }
+  //get vehiculosEnRuta() {
+  //  return this.vehiculos().filter(v => v.estado === 'En ruta').length;
+  //}
 
   get rutasActivas() {
     return this.rutas().filter(r => r.estado === 'activa').length;
@@ -281,9 +270,11 @@ export class PrincipalComponent implements OnInit {
   }
 
   abrirModalRegistrarVehiculo() {
-    this.formVehiculo.set({ placa: '', capacidad: 0, conductor: '', estado: 'En espera' });
-    this.showRegistrarVehiculoModal.set(true);
-  }
+  this.formVehiculo.set({placa: '', modelo: '', marca: '', activo: true});
+
+  this.showRegistrarVehiculoModal.set(true);
+}
+
 
   cerrarModalRegistrarVehiculo() {
     this.showRegistrarVehiculoModal.set(false);
@@ -341,42 +332,34 @@ export class PrincipalComponent implements OnInit {
   }
 
   guardarVehiculo() {
-    const form = this.formVehiculo();
-    
-    // Validación básica
-    if (!form.placa || !form.conductor || form.capacidad <= 0) {
-      alert('Por favor completa todos los campos correctamente');
-      return;
-    }
+  const form = this.formVehiculo();
+  const perfilId = 'bcadd725-99a9-458f-bb7f-2eea173c0eb3'; // debe ser dinámico si hay login
 
-    // TODO: Llamar al backend
-    const nuevoVehiculo: Vehiculo = {
-      id: (this.vehiculos().length + 1).toString(),
-      placa: form.placa,
-      capacidad: 0, // Capacidad actual en 0%
-      estado: form.estado,
-      conductor: form.conductor
-    };
-
-    this.vehiculos.update(vehiculos => [...vehiculos, nuevoVehiculo]);
-    
-    // Actualizar estadísticas
-    if (form.estado === 'En ruta') {
-      this.stats.update(s => ({ ...s, vehiculosActivos: s.vehiculosActivos + 1 }));
-    }
-
-    // Mostrar mensaje de éxito
-    this.avisos.update(avisos => [{
-      id: Date.now(),
-      tipo: 'success',
-      titulo: 'Vehículo registrado',
-      mensaje: `Vehículo ${form.placa} registrado con conductor ${form.conductor}`,
-      hora: new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }),
-      leido: false
-    }, ...avisos]);
-
-    this.cerrarModalRegistrarVehiculo();
+  if (!form.placa || !form.modelo || !form.marca) {
+    alert('Por favor completa todos los campos');
+    return;
   }
+
+  this.vehiculosService.registrarVehiculo(form, perfilId).subscribe({
+    next: () => {
+      this.cargarVehiculos();
+      this.avisos.update(avisos => [{
+        id: Date.now(),
+        tipo: 'success',
+        titulo: 'Vehículo registrado',
+        mensaje: `Vehículo ${form.placa} registrado correctamente`,
+        hora: new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }),
+        leido: false
+      }, ...avisos]);
+      this.cerrarModalRegistrarVehiculo();
+    },
+    error: (err) => {
+      console.error("❌ Error registrando vehículo:", err);
+      alert("Error registrando vehículo");
+    }
+  });
+}
+
 
   guardarDireccion() {
     const form = this.formDireccion();

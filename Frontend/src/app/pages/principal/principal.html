@@ -95,6 +95,7 @@
    
         <!-- Map Section -->
         <section class="map-section">
+          <app-herramientasmapa></app-herramientasmapa>
           <div class="section-card">
             <div class="card-header">
               <h2>Mapa en Tiempo Real</h2>
@@ -119,49 +120,50 @@
           <div class="panel-card vehicle-card" *ngIf="vehiculoSeleccionado() as vehiculo">
             <div class="card-header">
               <h3>Vehículo Actual</h3>
-              <span class="status-badge" [class]="vehiculo.estado.toLowerCase().replace(' ', '-')">
+
+              <!-- Estado booleano -->
+              <span 
+                class="status-badge"
+                [class.activo]="vehiculo.activo"
+                [class.inactivo]="!vehiculo.activo"
+              >
                 <span class="badge-dot"></span>
-                {{ vehiculo.estado }}
+                {{ vehiculo.activo? 'Activo' : 'Inactivo' }}
               </span>
             </div>
 
             <div class="vehicle-info">
+
+              <!-- PLACA -->
               <div class="vehicle-stat">
-                <span class="label">Conductor</span>
-                <span class="value">{{ vehiculo.conductor }}</span>
+                <span class="label">Placa</span>
+                <span class="value">{{ vehiculo.placa }}</span>
               </div>
+
+              <!-- MODELO -->
               <div class="vehicle-stat">
-                <span class="label">Ruta</span>
-                <span class="value">{{ vehiculo.rutaActual || 'Sin asignar' }}</span>
+                <span class="label">Modelo</span>
+                <span class="value">{{ vehiculo.modelo }}</span>
               </div>
+
+              <!-- MARCA -->
+              <div class="vehicle-stat">
+                <span class="label">Marca</span>
+                <span class="value">{{ vehiculo.marca }}</span>
+              </div>
+
+              <!-- RUTA -->
+              <div class="vehicle-stat">
+                <span class="label">Ruta asignada</span>
+                
+              </div>
+
             </div>
 
-            <div class="capacity-indicator">
-              <div class="capacity-header">
-                <span>Capacidad</span>
-                <span class="capacity-value">{{ vehiculo.capacidad }}%</span>
-              </div>
-              <div class="progress-bar">
-                <div 
-                  class="progress-fill" 
-                  [style.width.%]="vehiculo.capacidad"
-                  [class.high]="vehiculo.capacidad > 80"
-                  [class.medium]="vehiculo.capacidad > 50 && vehiculo.capacidad <= 80"
-                ></div>
-              </div>
-            </div>
+            <!-- Eliminada la capacidad porque no existe en la interface -->
 
-            <div class="vehicle-details">
-              <div class="detail-item">
-                <i class="fa-solid fa-id-card"></i>
-                <span>Placa: <strong>{{ vehiculo.placa }}</strong></span>
-              </div>
-            </div>
-
-            <button class="btn-primary" (click)="verRuta(vehiculo.rutaActual ? rutas()[0].id : 0)">
-              Ver Ruta Activa
-            </button>
           </div>
+
 
           <!-- Alerts/Notifications Card -->
           <div class="panel-card alerts-card">
@@ -280,42 +282,70 @@
   </div>
 
   <!-- Modal Registrar Vehículo -->
-  <div class="modal-overlay" *ngIf="showRegistrarVehiculoModal()" (click)="cerrarModalRegistrarVehiculo()">
-    <div class="modal-container" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2>Registrar Vehículo</h2>
-        <button class="close-btn" (click)="cerrarModalRegistrarVehiculo()">✕</button>
-      </div>
-      <div class="modal-body">
-        <form (submit)="$event.preventDefault(); guardarVehiculo()">
-          <div class="form-group">
-            <label>Placa</label>
-            <input type="text" [value]="formVehiculo().placa" (input)="formVehiculo().placa = $any($event.target).value" placeholder="Ej: ABC-123" required>
-          </div>
-          <div class="form-group">
-            <label>Capacidad (Kg)</label>
-            <input type="number" [value]="formVehiculo().capacidad" (input)="formVehiculo().capacidad = +$any($event.target).value" placeholder="Ej: 5000" required>
-          </div>
-          <div class="form-group">
-            <label>Conductor Asignado</label>
-            <input type="text" [value]="formVehiculo().conductor" (input)="formVehiculo().conductor = $any($event.target).value" placeholder="Nombre completo" required>
-          </div>
-          <div class="form-group">
-            <label>Estado Inicial</label>
-            <select [value]="formVehiculo().estado" (change)="formVehiculo().estado = $any($event.target).value">
-              <option value="En espera">En espera</option>
-              <option value="En ruta">En ruta</option>
-              <option value="Mantenimiento">Mantenimiento</option>
-            </select>
-          </div>
-          <div class="modal-actions">
-            <button type="button" class="btn-cancel" (click)="cerrarModalRegistrarVehiculo()">Cancelar</button>
-            <button type="submit" class="btn-submit">Registrar Vehículo</button>
-          </div>
-        </form>
-      </div>
+ <div class="modal-overlay" *ngIf="showRegistrarVehiculoModal()" (click)="cerrarModalRegistrarVehiculo()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Registrar Vehículo</h2>
+      <button class="close-btn" (click)="cerrarModalRegistrarVehiculo()">x</button>
+    </div>
+    <div class="modal-body">
+      <form (submit)="$event.preventDefault(); guardarVehiculo()">
+        <!-- PLACA -->
+        <div class="form-group">
+          <label>Placa</label>
+          <input 
+            type="text"
+            [value]="formVehiculo().placa"
+            (input)="formVehiculo().placa = $any($event.target).value"
+            placeholder="Ej: ABC-123"
+            required
+          >
+        </div>
+        <!-- MODELO -->
+        <div class="form-group">
+          <label>Modelo</label>
+          <input 
+            type="text"
+            [value]="formVehiculo().modelo"
+            (input)="formVehiculo().modelo = $any($event.target).value"
+            placeholder="Ej: Volquete 2020"
+            required
+          >
+        </div>
+        <!-- MARCA -->
+        <div class="form-group">
+          <label>Marca</label>
+          <input 
+            type="text"
+            [value]="formVehiculo().marca"
+            (input)="formVehiculo().marca = $any($event.target).value"
+            placeholder="Ej: Chevrolet"
+            required
+          >
+        </div>
+
+        <!-- ESTADO (BOOLEAN) -->
+        <div class="form-group">
+          <label>Estado Inicial</label>
+          <select 
+            [value]="formVehiculo().activo"
+            (change)="formVehiculo().activo = ($any($event.target).value === 'true')"
+          >
+            <option value="true">Activo</option>
+            <option value="false">Inactivo</option>
+          </select>
+        </div>
+
+        <!-- ACCIONES -->
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="cerrarModalRegistrarVehiculo()">Cancelar</button>
+          <button type="submit" class="btn-submit">Registrar Vehículo</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
+
 
   <!-- Modal Ingresar Dirección -->
   <div class="modal-overlay" *ngIf="showIngresarDireccionModal()" (click)="cerrarModalIngresarDireccion()">

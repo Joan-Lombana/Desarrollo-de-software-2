@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { LeafletMapService } from '../../services/leaflet-map';
+import { LeafletMapService } from '../../services/leaflet-map.services';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RutasService } from '../../services/rutas.services';
 
 
 @Component({
@@ -20,7 +21,8 @@ export class Herramientasmapa {
 
   constructor(
   private mapService: LeafletMapService,
-  private http: HttpClient
+  private http: HttpClient,
+  private api: RutasService
     
   ) {}
 
@@ -73,22 +75,35 @@ export class Herramientasmapa {
 
   // Exportar GeoJSON
   saveRoute() {
-    const geometry = this.mapService.getRouteGeoJSON();
-    if (!geometry) {
-      alert("No hay ruta para guardar");
-      return;
-    }
-
-    const body = {
-      nombre_ruta: this.nombreRuta,
-      perfil_id: "18851282-1a08-42b7-9384-243cc2ead349",
-      shape: geometry
-    };
-
-    this.http.post("http://localhost:3000/apilucio/rutas", body)
-      .subscribe(resp => {
-        console.log("Ruta guardada", resp);
-        this.closeSaveModal();
-      });
+  const geometry = this.mapService.getRouteGeoJSON(); // ya devuelve { type, coordinates }
+  if (!geometry) {
+    alert("No hay ruta para guardar");
+    return;
   }
+
+  const body = {
+    nombre_ruta: this.nombreRuta,
+    perfil_id: "bcadd725-99a9-458f-bb7f-2eea173c0eb3",
+    shape: {
+      type: geometry.type,
+      coordinates: geometry.coordinates
+    }
+  };
+
+  this.api.guardarRuta(body).subscribe({
+    next: resp => {
+      console.log("Ruta guardada", resp);
+      this.closeSaveModal();
+      this.mapService.resetMap();
+      this.nombreRuta = "";
+      this.modoDibujo = false;
+
+    },
+    error: err => {
+      console.error("Error guardando ruta", err);
+      alert("No se pudo guardar la ruta");
+    }
+  });
+}
+
 }
