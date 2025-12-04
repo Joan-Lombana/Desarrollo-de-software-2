@@ -38,10 +38,10 @@ export class AuthService {
     );
   }
 
-logout(): Observable<boolean> {
-  // Llamada al backend para cerrar sesión
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
+  logout(): Observable<boolean> {
+    // Llamada al backend para cerrar sesión
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
 
   // Limpiamos la señal del usuario
   this.currentUser.set(null);

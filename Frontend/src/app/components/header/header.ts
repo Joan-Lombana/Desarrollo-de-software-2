@@ -109,18 +109,18 @@ export class HeaderComponent implements OnInit {
     this.unreadCount.set(unread);
   }
 
-logout() {
-  this.authService.logout().subscribe({
-    next: () => {
-      this.router.navigate(['/inicio']);
-      this.showUserMenu.set(false);
-    },
-    error: () => {
-      // Incluso si hay error, navegar igual al inicio
-      this.router.navigate(['/inicio']);
-    }
-  });
-}
+  logout() {
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/']);
+        this.showUserMenu.set(false);
+      },
+      error: () => {
+        // Incluso si hay error, navegar igual al inicio
+        this.router.navigate(['/']);
+      }
+    });
+  }
 
 
   goToProfile() {
