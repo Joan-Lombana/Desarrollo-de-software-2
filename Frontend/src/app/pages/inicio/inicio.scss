@@ -33,30 +33,34 @@ $white: #ffffff;
     }
   }
   
-  .navbar-container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
+    .navbar-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
   .nav-brand {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    cursor: pointer;
-    
+    gap: 8px; // lo que tú quieres
+
+    .brand-logo {
+      width: 35px;
+      height: auto;
+    }
+
     .brand-name {
       font-size: 1.5rem;
       font-weight: 700;
       color: $white;
-      transition: color 0.3s ease;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }
-  }
+  }  
+
+
   
   .btn-login {
     padding: 0.625rem 1.5rem;
@@ -165,6 +169,7 @@ $white: #ffffff;
         }
       }
     }
+    
   }
 }
 
