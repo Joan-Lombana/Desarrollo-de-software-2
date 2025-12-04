@@ -12,17 +12,6 @@
       <p class="subtitle">Estado en tiempo real de vehículos y rutas</p>
     </div>
 
-    <!-- Barra de búsqueda -->
-    <div class="search-bar">
-      <i class="search-icon fa-solid fa-magnifying-glass"></i>
-      <input 
-        type="text" 
-        placeholder="Buscar vehículo, ruta, conductor..."
-        [value]="searchQuery()"
-        (input)="searchQuery.set($any($event.target).value)"
-        (keyup.enter)="onSearch()"
-      />
-    </div>
 
     <!-- Acciones del header -->
     <div class="header-actions">

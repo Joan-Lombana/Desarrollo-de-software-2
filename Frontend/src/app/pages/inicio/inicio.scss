@@ -76,6 +76,18 @@ $white: #ffffff;
   }
 }
 
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* espacio entre imagen y texto */
+}
+
+.brand-logo {
+  width: 35px;
+  height: auto;
+}
+  
+
 // ========== HERO SECTION ==========
 .hero-section {
   position: relative;

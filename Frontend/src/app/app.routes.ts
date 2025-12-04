@@ -18,7 +18,7 @@ export const routes: Routes = [
     component: RutasComponent,
   },
   {
-    path: "auth/callback",   // 👈 NECESARIO
+    path: "auth/callback",   //NECESARIO
     component: AuthCallback
   },
 ];
