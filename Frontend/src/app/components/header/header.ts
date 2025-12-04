@@ -1,12 +1,12 @@
 import { Component, inject, signal, output, OnInit } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.services';
-
+     
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './header.html',
   styleUrl: './header.scss'
 })
@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
   showNotifications = signal(false);
   
   // Datos del usuario desde el servicio de auth
-  currentUser = this.authService.currentUser;
+  //currentUser = this.authService.currentUser;
   
   // Notificaciones simuladas (luego vendrán del backend)
   notifications = signal([
@@ -49,6 +49,12 @@ export class HeaderComponent implements OnInit {
       read: true
     }
   ]);
+
+  currentUser = signal({
+  nombre: "Estefany",
+  correo: "estefany@test.com",
+  rol: "Admin"
+  });
 
   // Output para toggle del sidebar en mobile
   toggleSidebar = output<void>();
@@ -103,8 +109,15 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout().subscribe(() => {
-      this.router.navigate(['/login']);
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/']);
+        this.showUserMenu.set(false);
+      },
+      error: () => {
+        // Incluso si hay error, navegar igual al inicio
+        this.router.navigate(['/']);
+      }
     });
   }
 
