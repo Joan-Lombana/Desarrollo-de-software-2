@@ -84,6 +84,7 @@ export class LeafletMapService {
 
     if (this.routeCreated) {
       this.resetAll();
+      alert('Has revertido la ruta generada');
       return;
     }
 
@@ -135,7 +136,6 @@ export class LeafletMapService {
     this.waypoints = [];
     this.routeCreated = false;
 
-    alert('Se ha revertido la ruta generada');
   }
 
   /** Devuelve GeoJSON listo para guardar */

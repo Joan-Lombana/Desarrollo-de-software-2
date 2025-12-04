@@ -97,6 +97,7 @@ export class Herramientasmapa {
       this.mapService.resetMap();
       this.nombreRuta = "";
       this.modoDibujo = false;
+      alert('Se ha registrado con exito');
 
     },
     error: err => {

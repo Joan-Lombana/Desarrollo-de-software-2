@@ -26,7 +26,13 @@ export class VehiculosService {
     const params = new HttpParams().set('perfil_id', perfilId);
 
     console.log("📥 Consultando vehiculos:", `${this.baseUrl}/vehiculos`, "con params:", params.toString());
-
     return this.http.get(`${this.baseUrl}/vehiculos`, { params });
+  }
+
+  eliminarVehiculo(vehiculoId: string, perfilId: string) {
+    const params = new HttpParams().set('perfil_id', perfilId);
+
+    console.log("🗑️ Enviando DELETE a:", `${this.baseUrl}/vehiculos/${vehiculoId}`, "con params:", params.toString());
+    return this.http.delete(`${this.baseUrl}/vehiculos/${vehiculoId}`, { params });
   }
 }
