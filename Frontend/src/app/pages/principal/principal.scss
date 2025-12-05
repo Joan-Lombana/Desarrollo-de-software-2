@@ -13,108 +13,359 @@ $white: #ffffff;
 $shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 $radius: 12px;
 
-.app-layout { display: flex; height: 100vh; background-color: $bg; overflow: hidden; }
-
-.main-content {
-  flex: 1; display: flex; flex-direction: column; overflow: hidden; transition: margin-left 0.3s ease;
-  &.sidebar-open { @media (min-width: 1024px) { margin-left: 260px; } }
+.app-layout { 
+  display: flex; 
+  height: 100vh; 
+  background-color: $bg; 
+  overflow: hidden; 
 }
 
-.dashboard { flex: 1; padding: 2rem; overflow-y: auto; display: flex; flex-direction: column; gap: 2rem; }
+.main-content {
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  overflow: hidden; 
+  transition: margin-left 0.3s ease;
+  &.sidebar-open { 
+    @media (min-width: 1024px) { 
+      margin-left: 260px; 
+    } 
+  }
+}
+
+.dashboard { 
+  flex: 1; 
+  padding: 2rem; 
+  overflow-y: auto; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 2rem; 
+}
 
 .page-header {
-  display: flex; justify-content: space-between; align-items: flex-end;
+  display: flex; 
+  justify-content: space-between; 
+  align-items: flex-end;
   .header-content {
-    h1 { font-size: 1.8rem; color: $dark; font-weight: 700; }
-    .subtitle { color: $gray; font-size: 0.95rem; }
+    h1 { 
+      font-size: 1.8rem; 
+      color: $dark; 
+      font-weight: 700; 
+    }
+    .subtitle { 
+      color: $gray; 
+      font-size: 0.95rem; 
+    }
   }
   .quick-actions {
     display: flex; gap: 1rem;
     .btn-action {
-      display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem;
-      border-radius: $radius; border: none; font-weight: 600; cursor: pointer;
-      &.primary { background-color: $primary; color: $white; }
-      &.secondary { background-color: $secondary; color: $white; }
-      &.outline { background-color: transparent; border: 2px solid $gray; color: $text; }
+      display: flex; 
+      align-items: center; 
+      gap: 0.5rem; 
+      padding: 0.75rem 1.25rem;
+      border-radius: $radius; 
+      border: none; 
+      font-weight: 600; 
+      cursor: pointer;
+      &.primary { 
+        background-color: $primary; 
+        color: $white; 
+      }
+      &.secondary { 
+        background-color: $secondary; 
+        color: $white; 
+      }
+      &.outline { 
+        background-color: transparent; 
+        border: 2px solid $gray; 
+        color: $text; }
     }
   }
 }
 
 .stats-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+  gap: 1.5rem;
   .stat-card {
-    background: $white; padding: 1.5rem; border-radius: $radius; box-shadow: $shadow; border-left: 4px solid transparent;
-    &.green { border-left-color: $primary; .stat-icon { color: $primary; background: rgba($primary, 0.1); } }
-    &.blue { border-left-color: $secondary; .stat-icon { color: $secondary; background: rgba($secondary, 0.1); } }
-    &.purple { border-left-color: #9b59b6; .stat-icon { color: #9b59b6; background: rgba(155, 89, 182, 0.1); } }
-    &.orange { border-left-color: #e67e22; .stat-icon { color: #e67e22; background: rgba(230, 126, 34, 0.1); } }
-    .stat-header { display: flex; justify-content: space-between; margin-bottom: 1rem;
-      .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+    background: $white; 
+    padding: 1.5rem; 
+    border-radius: $radius; 
+    box-shadow: $shadow; 
+    border-left: 4px solid transparent;
+    &.green { 
+      border-left-color: $primary; 
+      .stat-icon { 
+        color: $primary; 
+        background: rgba($primary, 0.1); 
+      } }
+    &.blue { 
+      border-left-color: $secondary; 
+      .stat-icon { 
+        color: $secondary; 
+        background: rgba($secondary, 0.1); 
+      } }
+    &.purple { 
+      border-left-color: #9b59b6; 
+      .stat-icon { color: #9b59b6; 
+        background: rgba(155, 89, 182, 0.1); } 
+      }
+    &.orange { 
+      border-left-color: #e67e22; 
+      .stat-icon { 
+        color: #e67e22; background: rgba(230, 126, 34, 0.1); } 
+      }
+    .stat-header { 
+      display: flex; 
+      justify-content: space-between; 
+      margin-bottom: 1rem;
+      .stat-icon { 
+        width: 48px; 
+        height: 48px; 
+        border-radius: 12px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+      }
     }
-    .stat-body { h3 { font-size: 1.8rem; font-weight: 700; color: $dark; } p { color: $gray; font-size: 0.9rem; } }
+    .stat-body { 
+      h3 { 
+        font-size: 1.8rem; 
+        font-weight: 700; 
+        color: $dark; 
+      } p 
+      { 
+        color: $gray; 
+        font-size: 0.9rem; } 
+      }
   }
 }
 
 .content-grid {
-  display: grid; grid-template-columns: 1fr 350px; gap: 1.5rem; min-height: 500px;
-  @media (max-width: 1024px) { grid-template-columns: 1fr; }
+  display: grid; 
+  grid-template-columns: 1fr 350px; 
+  gap: 1.5rem; 
+  min-height: 500px;
+  @media (max-width: 1024px) { 
+    grid-template-columns: 1fr; }
 }
 
 .map-section {
   .section-card {
-    background: $white; border-radius: $radius; box-shadow: $shadow; height: 100%;
-    display: flex; flex-direction: column; overflow: hidden;
+    background: $white; 
+    border-radius: $radius; 
+    box-shadow: $shadow; 
+    height: 100%;
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden;
     .card-header {
-      padding: 1.5rem; border-bottom: 1px solid $light; display: flex; justify-content: space-between; align-items: center;
-      h2 { font-size: 1.2rem; color: $dark; }
-      .select-route { padding: 0.5rem; border-radius: 8px; border: 1px solid $light; color: $text; }
+      padding: 1.5rem; 
+      border-bottom: 1px solid $light; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      h2 { 
+        font-size: 1.2rem; 
+        color: $dark; 
+      }
+      .select-route { 
+        padding: 0.5rem; 
+        border-radius: 8px; 
+        border: 1px solid $light; 
+        color: $text; 
+      }
     }
+
     .map-container {
-      flex: 1; min-height: 400px; background: $bg; position: relative;
-      app-mapa { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-      app-herramientasmapa { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; }
+      flex: 1; 
+      min-height: 400px; 
+      background: $bg; 
+      position: relative;
+      app-mapa { 
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%; 
+      }
+      app-herramientasmapa { 
+        position: absolute; 
+        top: 10px; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        z-index: 1000; 
+      }
     }
   }
 }
 
 .side-panel {
-  background: $white; border-radius: $radius; box-shadow: $shadow; padding: 1.5rem;
-  h3 { font-size: 1.1rem; color: $dark; margin-bottom: 1rem; }
+  background: $white; 
+  border-radius: $radius; 
+  box-shadow: $shadow; 
+  padding: 1.5rem;
+  h3 { 
+    font-size: 1.1rem; 
+    color: $dark; 
+    margin-bottom: 1rem; 
+  }
   .vehicle-list {
-    display: flex; flex-direction: column; gap: 0.75rem;
+    display: flex; 
+    flex-direction: column; 
+    gap: 0.75rem;
+
+    /* Scroll vertical */
+    max-height: 400px; // ajusta según tu diseño
+    overflow-y: auto;
+
     .vehicle-item {
-      display: flex; align-items: center; gap: 1rem; padding: 1rem; background: $bg; border-radius: 8px; cursor: pointer;
+      display: flex; 
+      align-items: center; 
+      gap: 1rem; 
+      padding: 1rem; 
+      background: $bg; 
+      border-radius: 8px; 
+      cursor: pointer;
+
       &:hover { background: $light; }
       &.active { border-left: 3px solid $primary; }
-      .vehicle-icon { width: 40px; height: 40px; background: rgba($primary, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: $primary; }
-      .vehicle-info { flex: 1; .placa { font-weight: 600; color: $dark; } .modelo { font-size: 0.85rem; color: $gray; } }
-      .vehicle-status { font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 10px;
-        &.activo { background: rgba($primary, 0.1); color: $primary; }
-        &.inactivo { background: rgba($danger, 0.1); color: $danger; }
+
+      .vehicle-icon { 
+        width: 40px; 
+        height: 40px; 
+        background: rgba($primary, 0.1); 
+        border-radius: 8px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        color: $primary; 
+      }
+
+      .vehicle-info { 
+        flex: 1; 
+        .placa { 
+          font-weight: 600; 
+          color: $dark; 
+        } 
+        .modelo { 
+          font-size: 0.85rem; 
+          color: $gray; } 
+      }
+
+      .vehicle-status { 
+        font-size: 0.75rem; 
+        padding: 0.25rem 0.5rem; 
+        border-radius: 10px;
+
+        &.activo { 
+          background: rgba($primary, 0.1); 
+          color: $primary; 
+        }
+        &.inactivo { 
+          background: rgba($danger, 0.1); 
+          color: $danger; }
       }
     }
   }
-  .empty-state { text-align: center; padding: 2rem; color: $gray; i { font-size: 2rem; margin-bottom: 1rem; opacity: 0.5; display: block; } }
+  .empty-state { 
+    text-align: center; 
+    padding: 2rem; 
+    color: $gray; i 
+    { font-size: 2rem; 
+      margin-bottom: 1rem; 
+      opacity: 0.5; 
+      display: block; } 
+    }
 }
 
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px); }
+.modal-overlay { 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  background: rgba(0, 0, 0, 0.5); 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  z-index: 1000; 
+  backdrop-filter: blur(4px); 
+}
 .modal-container {
-  background: $white; border-radius: $radius; width: 90%; max-width: 500px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  .modal-header { padding: 1.5rem; border-bottom: 1px solid $light; display: flex; justify-content: space-between; align-items: center;
-    h2 { font-size: 1.25rem; color: $dark; margin: 0; }
-    .close-btn { background: none; border: none; font-size: 1.5rem; color: $gray; cursor: pointer; }
+  background: $white; 
+  border-radius: $radius; 
+  width: 90%; 
+  max-width: 500px; 
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  .modal-header { 
+    padding: 1.5rem; 
+    border-bottom: 1px solid $light; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    h2 { 
+      font-size: 1.25rem; 
+      color: $dark; 
+      margin: 0; 
+    }
+    .close-btn { 
+      background: none; 
+      border: none; 
+      font-size: 1.5rem; 
+      color: $gray; 
+      cursor: pointer; 
+    }
   }
-  .modal-body { padding: 1.5rem;
-    form { display: flex; flex-direction: column; gap: 1.25rem;
-      .form-group { display: flex; flex-direction: column; gap: 0.5rem;
-        label { font-size: 0.9rem; font-weight: 600; color: $text; }
-        input, select { padding: 0.75rem; border: 1px solid $light; border-radius: 8px; font-size: 0.95rem; color: $dark; }
+  .modal-body { 
+    padding: 1.5rem;
+    form { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 1.25rem;
+      .form-group { 
+        display: flex; 
+        flex-direction: column; 
+        gap: 0.5rem;
+        label { 
+          font-size: 0.9rem; 
+          font-weight: 600; 
+          color: $text; 
+        }
+        input, select { 
+          padding: 0.75rem; 
+          border: 1px solid $light; 
+          border-radius: 8px; 
+          font-size: 0.95rem; 
+          color: $dark; 
+        }
       }
-      .modal-actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem;
-        button { padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; }
-        .btn-cancel { background: $light; color: $text; }
-        .btn-secondary { background: $secondary; color: $white; }
-        .btn-submit { background: $primary; color: $white; }
+      .modal-actions { 
+        display: flex; 
+        justify-content: 
+        flex-end; 
+        gap: 1rem; 
+        margin-top: 1rem;
+        button { 
+          padding: 0.75rem 1.5rem; 
+          border-radius: 8px; 
+          font-weight: 600; 
+          cursor: pointer; 
+          border: none; 
+        }
+        .btn-cancel { 
+          background: $light; 
+          color: $text; 
+        }
+        .btn-secondary { 
+          background: $secondary; 
+          color: $white; 
+        }
+        .btn-submit { 
+          background: $primary; 
+          color: $white; 
+        }
       }
     }
   }

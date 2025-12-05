@@ -8,11 +8,13 @@
     height: 100%;
   }
 
+
   .tool-item.disabled {
-    opacity: 0.4;
-    pointer-events: none;
-    filter: grayscale(100%);
-  }
+  opacity: 0.4;
+  pointer-events: none;
+  filter: grayscale(100%);
+    }
+
 
   .tool-panel-horizontal {
     position: absolute;
@@ -20,14 +22,13 @@
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    flex-direction: row;
+    flex-direction: row; // horizontal
     gap: 12px;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.547);
     padding: 8px 12px;
     border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 
     .tool-item {
       display: flex;
@@ -38,30 +39,31 @@
       gap: 4px;
       padding: 6px;
       transition: all 0.2s;
+
       position: relative;
       overflow: hidden;
 
       &:active {
-        transform: scale(0.92);
+          transform: scale(0.92);
       }
 
-      /* efecto ripple */
+        /* efecto ripple */
       &::after {
-        content: "";
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background: rgba(255, 255, 255, 0.7);
-        border-radius: 50%;
-        transform: scale(0);
-        opacity: 0;
-        pointer-events: none;
-        transition: transform 0.4s ease, opacity 0.45s ease;
+          content: "";
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          background: rgba(255, 255, 255, 0.7);
+          border-radius: 50%;
+          transform: scale(0);
+          opacity: 0;
+          pointer-events: none;
+          transition: transform 0.4s ease, opacity 0.45s ease;
       }
 
       &.clicked::after {
-        transform: scale(12);
-        opacity: 0;
+          transform: scale(12);
+          opacity: 0;
       }
 
       img {
@@ -73,6 +75,7 @@
         font-size: 12px;
       }
 
+      
       &:hover {
         background: #020202b2;
         color: white;
@@ -82,8 +85,7 @@
           filter: brightness(0) invert(1);
         }
       }
-
-      &.active {
+      &.active{
         background: #020202b2;
         color: white;
         border-radius: 8px;
@@ -96,147 +98,43 @@
   }
 }
 
-/* Modal para guardar ruta - CORREGIDO */
 .save-modal {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
-  pointer-events: none; // Permite interacción con el mapa
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    pointer-events: all; // Solo el overlay bloquea
-  }
-}
-
-.modal-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  pointer-events: all;
+  z-index: 9999;
 }
 
 .modal-content {
   background: white;
-  padding: 32px;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 440px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  text-align: left;
-  position: relative;
-  z-index: 10001;
-  pointer-events: all; // El contenido sí debe recibir clics
-  animation: modalSlideIn 0.3s ease-out;
+  padding: 20px;
+  border-radius: 12px;
+  width: 320px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+  text-align: center;
+}
 
-  h3 {
-    margin: 0 0 24px 0;
-    font-size: 24px;
-    font-weight: 600;
-    color: #1a1a1a;
-    text-align: left;
-  }
-
-  input {
-    width: 100%;
-    margin-top: 0;
-    padding: 14px 16px;
-    border-radius: 10px;
-    border: 2px solid #e0e0e0;
-    font-size: 15px;
-    transition: all 0.2s;
-    box-sizing: border-box;
-
-    &:focus {
-      outline: none;
-      border-color: #2ecc71;
-      box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
-    }
-
-    &::placeholder {
-      color: #999;
-    }
-  }
+.modal-content input {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
 .btn-confirm {
-  margin-top: 24px;
+  margin-top: 15px;
   width: 100%;
-  padding: 14px;
-  background: #2ecc71;
+  padding: 10px;
+  background: #007bff;
   color: white;
-  border-radius: 10px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
-  transition: all 0.2s;
-
-  &:hover {
-    background: #27ae60;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-}
-
-@keyframes modalSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-30px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .tool-panel-horizontal {
-    top: 10px;
-    gap: 8px;
-    padding: 6px 10px;
-
-    .tool-item {
-      padding: 4px;
-
-      img {
-        width: 20px;
-        height: 20px;
-      }
-
-      span {
-        font-size: 10px;
-      }
-    }
-  }
-
-  .modal-content {
-    width: 85%;
-    padding: 24px;
-
-    h3 {
-      font-size: 20px;
-    }
-  }
 }

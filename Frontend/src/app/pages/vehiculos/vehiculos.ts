@@ -5,7 +5,13 @@ import { HeaderComponent } from '../../components/header/header';
 import { SidebarComponent } from '../../components/sidebar/sidebar';
 import { VehiculosService } from '../../services/vehiculos.services';
 
-interface Vehiculo { id: string; placa: string; modelo: string; marca: string; activo: boolean; }
+interface Vehiculo { 
+  id: string; 
+  placa: string; 
+  modelo: string; 
+  marca: string; 
+  activo: boolean; 
+}
 
 @Component({
   selector: 'app-vehiculos',
@@ -15,13 +21,17 @@ interface Vehiculo { id: string; placa: string; modelo: string; marca: string; a
   styleUrls: ['./vehiculos.scss']
 })
 export class VehiculosComponent implements OnInit {
+
   private vehiculosService = inject(VehiculosService);
   private perfilId = 'bcadd725-99a9-458f-bb7f-2eea173c0eb3';
+
   sidebarOpen = signal(true);
   vehiculos = signal<Vehiculo[]>([]);
   editando = signal<Vehiculo | null>(null);
 
-  ngOnInit() { this.cargarVehiculos(); }
+  ngOnInit() { 
+    this.cargarVehiculos(); 
+  }
 
   cargarVehiculos() {
     this.vehiculosService.getVehiculos(this.perfilId).subscribe({
@@ -33,25 +43,36 @@ export class VehiculosComponent implements OnInit {
     });
   }
 
-  toggleSidebar() { this.sidebarOpen.update(v => !v); }
+  toggleSidebar() { 
+    this.sidebarOpen.update(v => !v); 
+  }
 
   eliminarVehiculo(v: Vehiculo) {
     if (confirm(`¿Eliminar vehículo ${v.placa}?`)) {
-      this.vehiculosService.eliminarVehiculo(v.id).subscribe({
+      this.vehiculosService.eliminarVehiculo(v.id, this.perfilId).subscribe({
         next: () => this.cargarVehiculos(),
         error: () => alert('Error eliminando vehículo')
       });
     }
   }
 
-  editarVehiculo(v: Vehiculo) { this.editando.set({...v}); }
-  cancelarEdicion() { this.editando.set(null); }
+  editarVehiculo(v: Vehiculo) { 
+    this.editando.set({ ...v }); 
+  }
+
+  cancelarEdicion() { 
+    this.editando.set(null); 
+  }
 
   guardarEdicion() {
     const v = this.editando();
     if (!v) return;
-    this.vehiculosService.actualizarVehiculo(v.id, v).subscribe({
-      next: () => { this.editando.set(null); this.cargarVehiculos(); },
+
+    this.vehiculosService.actualizarVehiculo(v.id, v, this.perfilId).subscribe({
+      next: () => {
+        this.editando.set(null);
+        this.cargarVehiculos();
+      },
       error: () => alert('Error actualizando vehículo')
     });
   }

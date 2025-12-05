@@ -5,7 +5,13 @@ import { HeaderComponent } from '../../components/header/header';
 import { SidebarComponent } from '../../components/sidebar/sidebar';
 import { RutasService } from '../../services/rutas.services';
 
-interface Ruta { id: number; nombre: string; horario: string; zona: string; estado: string; }
+interface Ruta { 
+  id: number; 
+  nombre: string; 
+  horario: string; 
+  zona: string; 
+  estado: string; 
+}
 
 @Component({
   selector: 'app-rutas',
@@ -15,15 +21,18 @@ interface Ruta { id: number; nombre: string; horario: string; zona: string; esta
   styleUrls: ['./rutas.scss']
 })
 export class RutasComponent implements OnInit {
+  private perfilId = 'bcadd725-99a9-458f-bb7f-2eea173c0eb3';
   private rutasService = inject(RutasService);
+
   sidebarOpen = signal(true);
   rutas = signal<Ruta[]>([]);
   editando = signal<Ruta | null>(null);
 
-  ngOnInit() { this.cargarRutas(); }
+  ngOnInit() { this.cargarRutas(); 
+  }
 
   cargarRutas() {
-    this.rutasService.getRutas().subscribe({
+    this.rutasService.getRutas(this.perfilId).subscribe({
       next: (resp: any) => {
         const arr = Array.isArray(resp) ? resp : (resp.data || resp.rutas || []);
         this.rutas.set(arr);
@@ -32,7 +41,9 @@ export class RutasComponent implements OnInit {
     });
   }
 
-  toggleSidebar() { this.sidebarOpen.update(v => !v); }
+  toggleSidebar() { 
+    this.sidebarOpen.update(v => !v); 
+  }
 
   eliminarRuta(ruta: Ruta) {
     if (confirm(`¿Eliminar ruta "${ruta.nombre}"?`)) {
@@ -43,17 +54,28 @@ export class RutasComponent implements OnInit {
     }
   }
 
-  editarRuta(ruta: Ruta) { this.editando.set({...ruta}); }
-  cancelarEdicion() { this.editando.set(null); }
+  editarRuta(ruta: Ruta) {
+    this.editando.set({ ...ruta });
+  }
+
+  cancelarEdicion() {
+    this.editando.set(null);
+  }
 
   guardarEdicion() {
     const ruta = this.editando();
     if (!ruta) return;
-    this.rutasService.actualizarRuta(ruta.id, ruta).subscribe({
-      next: () => { this.editando.set(null); this.cargarRutas(); },
+
+    this.rutasService.actualizarRuta(ruta.id, ruta,).subscribe({
+      next: () => {
+        this.editando.set(null);
+        this.cargarRutas();
+      },
       error: () => alert('Error actualizando ruta')
     });
   }
 
-  visualizarRuta(ruta: Ruta) { console.log('Visualizar:', ruta); }
+  visualizarRuta(ruta: Ruta) {
+    console.log('Visualizar:', ruta);
+  }
 }
