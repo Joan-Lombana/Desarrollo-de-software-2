@@ -1,61 +1,19 @@
 <aside class="sidebar" [class.open]="isOpen()">
-
-  <!-- Brand / Logo -->
   <div class="sidebar-brand">
-    <div class="brand-logo">
-      <i class="fa-solid fa-truck-fast"></i>
-    </div>
+    <div class="brand-logo"><i class="fa-solid fa-truck-fast"></i></div>
     @if (isOpen()) {
-      <div class="brand-text">
-        <h2>BMArutas</h2>
-        <p>Sistema de Gestión</p>
-      </div>
+      <div class="brand-text"><h2>BMArutas</h2><p>Sistema de Gestión</p></div>
     }
   </div>
-
-  <!-- Navigation Menu -->
   <nav class="sidebar-nav">
     <div class="nav-section">
-      @if (isOpen()) {
-        <p class="nav-title">MENÚ PRINCIPAL</p>
-      }
-
+      @if (isOpen()) { <p class="nav-title">MENÚ PRINCIPAL</p> }
       @for (item of menuItems; track item) {
-        <a
-          [routerLink]="item.route"
-          routerLinkActive="active"
-          class="nav-item"
-          (click)="onNavigate()"
-          [title]="item.label"
-          >
-          <!-- Icons based on item.icon -->
-          @if (item.icon === 'dashboard') {
-            <i class="nav-icon fa-solid fa-table-columns"></i>
-          }
-          @if (item.icon === 'map') {
-            <i class="nav-icon fa-solid fa-map-location-dot"></i>
-          }
-          @if (item.icon === 'route') {
-            <i class="nav-icon fa-solid fa-route"></i>
-          }
-          @if (item.icon === 'bell') {
-            <i class="nav-icon fa-solid fa-bell"></i>
-          }
-          @if (item.icon === 'truck') {
-            <i class="nav-icon fa-solid fa-truck"></i>
-          }
-          @if (item.icon === 'users') {
-            <i class="nav-icon fa-solid fa-users"></i>
-          }
-          @if (item.icon === 'chart') {
-            <i class="nav-icon fa-solid fa-chart-line"></i>
-          }
-          @if (isOpen()) {
-            <span class="nav-label">{{ item.label }}</span>
-          }
-          @if (item.badge && item.badge > 0 && isOpen()) {
-            <span class="nav-badge">{{ item.badge }}</span>
-          }
+        <a [routerLink]="item.route" routerLinkActive="active" class="nav-item" (click)="onNavigate()" [title]="item.label">
+          @if (item.icon === 'dashboard') { <i class="nav-icon fa-solid fa-table-columns"></i> }
+          @if (item.icon === 'route') { <i class="nav-icon fa-solid fa-route"></i> }
+          @if (item.icon === 'truck') { <i class="nav-icon fa-solid fa-truck"></i> }
+          @if (isOpen()) { <span class="nav-label">{{ item.label }}</span> }
         </a>
       }
     </div>

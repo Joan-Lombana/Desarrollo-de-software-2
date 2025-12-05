@@ -2,11 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient,HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class RutasService {
-
   private baseUrl = `${environment.apiUrl}/operativo`;
   constructor(private http: HttpClient) {}
   
@@ -24,6 +21,11 @@ export class RutasService {
   }
   
 
+  actualizarRuta(id: number, body: any) {
+    return this.http.put(`${this.baseUrl}/rutas/${id}`, body);
+  }
+
+  eliminarRuta(id: number) {
+    return this.http.delete(`${this.baseUrl}/rutas/${id}`);
+  }
 }
-
-

@@ -20,21 +20,8 @@ export class MapaComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-
     setTimeout(() => {
       this.mapService.initMap('map');
-
-      // Cargar rutas desde backend
-      this.http.get<any[]>(this.rutasUrl, { params: { perfil_id: '18851282-1a08-42b7-9384-243cc2ead349' } })
-  .subscribe(rutas => {
-    rutas.forEach(ruta => {
-      if (ruta.shape) {
-        this.mapService.addGeoJsonLayer(
-          typeof ruta.shape === "string" ? JSON.parse(ruta.shape) : ruta.shape
-        );
-      }
-    });
-  });
     }, 0);
   }
 }

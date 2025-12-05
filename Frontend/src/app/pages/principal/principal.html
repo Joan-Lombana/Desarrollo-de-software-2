@@ -1,382 +1,97 @@
 <div class="app-layout">
-  
-  <!-- Sidebar -->
-  <app-sidebar 
-    [isOpen]="sidebarOpen()"
-    (closeSidebar)="toggleSidebar()"
-  ></app-sidebar>
-
-  <!-- Main Content -->
+  <app-sidebar [isOpen]="sidebarOpen()" (closeSidebar)="toggleSidebar()"></app-sidebar>
   <div class="main-content" [class.sidebar-open]="sidebarOpen()">
-    
-    <!-- Header -->
     <app-header (toggleSidebar)="toggleSidebar()"></app-header>
-
-    <!-- Dashboard Content -->
     <main class="dashboard">
-      
-      <!-- Page Header -->
       <div class="page-header">
         <div class="header-content">
           <h1>Rastreo de Rutas</h1>
-          <p class="subtitle">Monitoreo en tiempo real de vehículos y rutas de recolección</p>
+          <p class="subtitle">Monitoreo en tiempo real de vehículos y rutas</p>
         </div>
-        
-        <!-- Quick Actions -->
         <div class="quick-actions">
-          <button class="btn-action primary" (click)="abrirModalRegistrarRuta()">
-            <i class="fa-solid fa-plus"></i>
-            Registrar Ruta
-          </button>
-          <button class="btn-action secondary" (click)="abrirModalRegistrarVehiculo()">
-            <i class="fa-solid fa-truck"></i>
-            Registrar Vehículo
-          </button>
-          <button class="btn-action outline" (click)="abrirModalIngresarDireccion()">
-            <i class="fa-solid fa-location-dot"></i>
-            Nueva Dirección
-          </button>
+          <button class="btn-action primary" (click)="abrirModalRegistrarRuta()"><i class="fa-solid fa-plus"></i> Registrar Ruta</button>
+          <button class="btn-action secondary" (click)="abrirModalRegistrarVehiculo()"><i class="fa-solid fa-truck"></i> Registrar Vehículo</button>
+          <button class="btn-action outline" (click)="abrirModalIngresarDireccion()"><i class="fa-solid fa-location-dot"></i> Nueva Dirección</button>
         </div>
       </div>
-      <!-- Stats Cards -->
       <div class="stats-grid">
-        <div class="stat-card green">
-          <div class="stat-header">
-            <div class="stat-icon">
-              <i class="fa-solid fa-truck-moving"></i>
-            </div>
-          </div>
-          <div class="stat-body">
-            <h3>{{ stats().vehiculosActivos }}</h3>
-            <p>Vehículos Activos</p>
-          </div>
-        </div>
-
-        <div class="stat-card blue">
-          <div class="stat-header">
-            <div class="stat-icon">
-              <i class="fa-solid fa-route"></i>
-            </div>
-          </div>
-          <div class="stat-body">
-            <h3>{{ stats().rutasCompletadas }}</h3>
-            <p>Rutas Completadas</p>
-          </div>
-        </div>
-
-        <div class="stat-card purple">
-          <div class="stat-header">
-            <div class="stat-icon">
-              <i class="fa-solid fa-chart-pie"></i>
-            </div>
-          </div>
-          <div class="stat-body">
-            <h3>{{ stats().eficiencia }}%</h3>
-            <p>Eficiencia</p>
-          </div>
-        </div>
-
-        <div class="stat-card orange">
-          <div class="stat-header">
-            <div class="stat-icon">
-              <i class="fa-solid fa-road"></i>
-            </div>
-          </div>
-          <div class="stat-body">
-            <h3>{{ stats().kmRecorridos }} KM</h3>
-            <p>Distancia Recorrida</p>
-          </div>
-        </div>
+        <div class="stat-card green"><div class="stat-header"><div class="stat-icon"><i class="fa-solid fa-truck-moving"></i></div></div><div class="stat-body"><h3>{{ stats().vehiculosActivos }}</h3><p>Vehículos Activos</p></div></div>
+        <div class="stat-card blue"><div class="stat-header"><div class="stat-icon"><i class="fa-solid fa-route"></i></div></div><div class="stat-body"><h3>{{ stats().rutasCompletadas }}</h3><p>Rutas Completadas</p></div></div>
+        <div class="stat-card purple"><div class="stat-header"><div class="stat-icon"><i class="fa-solid fa-chart-pie"></i></div></div><div class="stat-body"><h3>{{ stats().eficiencia }}%</h3><p>Eficiencia</p></div></div>
+        <div class="stat-card orange"><div class="stat-header"><div class="stat-icon"><i class="fa-solid fa-road"></i></div></div><div class="stat-body"><h3>{{ stats().kmRecorridos }} KM</h3><p>Distancia Recorrida</p></div></div>
       </div>
-       
-      <!-- Main Grid -->
       <div class="content-grid">
-        
-   
-        <!-- Map Section -->
         <section class="map-section">
-          <app-herramientasmapa></app-herramientasmapa>
           <div class="section-card">
             <div class="card-header">
               <h2>Mapa en Tiempo Real</h2>
-              
-              <div class="header-actions">
-                <select class="select-route">
-                  <option value="">Todas las rutas</option>
-                  <option *ngFor="let ruta of rutas()" [value]="ruta.id">{{ ruta.nombre }}</option>
-                </select>
-              </div>
+              <select class="select-route"><option value="">Todas las rutas</option><option *ngFor="let ruta of rutas()" [value]="ruta.id">{{ ruta.nombre }}</option></select>
             </div>
             <div class="map-container">
               <app-mapa></app-mapa>
+              <app-herramientasmapa *ngIf="showRouteTools()"></app-herramientasmapa>
             </div>
           </div>
         </section>
-
-        <!-- Right Panel -->
         <aside class="side-panel">
-          
-          <!-- Current Vehicle Card -->
-          <div class="panel-card vehicle-card" *ngIf="vehiculoSeleccionado() as vehiculo">
-            <div class="card-header">
-              <h3>Vehículo Actual</h3>
-
-              <!-- Estado booleano -->
-              <span 
-                class="status-badge"
-                [class.activo]="vehiculo.activo"
-                [class.inactivo]="!vehiculo.activo"
-              >
-                <span class="badge-dot"></span>
-                {{ vehiculo.activo? 'Activo' : 'Inactivo' }}
-              </span>
-            </div>
-
-            <div class="vehicle-info">
-
-              <!-- PLACA -->
-              <div class="vehicle-stat">
-                <span class="label">Placa</span>
-                <span class="value">{{ vehiculo.placa }}</span>
-              </div>
-
-              <!-- MODELO -->
-              <div class="vehicle-stat">
-                <span class="label">Modelo</span>
-                <span class="value">{{ vehiculo.modelo }}</span>
-              </div>
-
-              <!-- MARCA -->
-              <div class="vehicle-stat">
-                <span class="label">Marca</span>
-                <span class="value">{{ vehiculo.marca }}</span>
-              </div>
-
-              <!-- RUTA -->
-              <div class="vehicle-stat">
-                <span class="label">Ruta asignada</span>
-                
-              </div>
-
-            </div>
-
-            <!-- Eliminada la capacidad porque no existe en la interface -->
-
-          </div>
-
-
-          <!-- Alerts/Notifications Card -->
-          <div class="panel-card alerts-card">
-            <div class="card-header">
-              <h3>Alertas y Notificaciones</h3>
-              <span class="alert-count" *ngIf="avisosNoLeidos.length > 0">
-                {{ avisosNoLeidos.length }}
-              </span>
-            </div>
-
-            <div class="alerts-list">
-              <div 
-                class="alert-item" 
-                *ngFor="let aviso of avisos()" 
-                [class]="aviso.tipo"
-                [class.unread]="!aviso.leido"
-              >
-                <div class="alert-icon">
-                  <i *ngIf="aviso.tipo === 'warning'" class="fa-solid fa-triangle-exclamation"></i>
-                  <i *ngIf="aviso.tipo === 'success'" class="fa-solid fa-check"></i>
-                  <i *ngIf="aviso.tipo === 'info'" class="fa-solid fa-circle-info"></i>
-                </div>
-                <div class="alert-content">
-                  <h4>{{ aviso.titulo }}</h4>
-                  <p>{{ aviso.mensaje }}</p>
-                  <span class="alert-time">{{ aviso.hora }}</span>
-                </div>
-                <button class="alert-action" (click)="marcarAvisoLeido(aviso.id)" *ngIf="!aviso.leido">
-                  <i class="fa-solid fa-check"></i>
-                </button>
-              </div>
-
-              <div class="empty-state" *ngIf="avisos().length === 0">
-                <i class="fa-regular fa-bell-slash" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                <p>No hay alertas recientes</p>
-              </div>
+          <h3>Vehículos</h3>
+          <div class="vehicle-list" *ngIf="vehiculos().length > 0; else noVehiculos">
+            <div *ngFor="let v of vehiculos()" class="vehicle-item" [class.active]="vehiculoSeleccionado()?.id === v.id" (click)="seleccionarVehiculo(v)">
+              <div class="vehicle-icon"><i class="fa-solid fa-truck"></i></div>
+              <div class="vehicle-info"><div class="placa">{{ v.placa }}</div><div class="modelo">{{ v.modelo }}</div></div>
+              <span class="vehicle-status" [class.activo]="v.activo" [class.inactivo]="!v.activo">{{ v.activo ? 'Activo' : 'Inactivo' }}</span>
             </div>
           </div>
+          <ng-template #noVehiculos><div class="empty-state"><i class="fa-solid fa-truck"></i><p>No hay vehículos registrados</p></div></ng-template>
         </aside>
       </div>
-
-      <!-- Route Status Cards -->
-      <section class="route-cards">
-        <h2 class="section-title">Estado de Rutas</h2>
-        <div class="route-grid">
-          <div class="route-card" *ngFor="let ruta of rutas()" [class]="ruta.estado">
-            <div class="route-header">
-              <div>
-                <h3>{{ ruta.nombre }}</h3>
-                <p>{{ ruta.zona }}</p>
-              </div>
-              <span class="route-status" [class]="ruta.estado">
-                {{ ruta.estado }}
-              </span>
-            </div>
-            <div class="route-time">
-              <i class="fa-regular fa-clock"></i>
-              <span>{{ ruta.horario }}</span>
-            </div>
-            <div class="route-progress" *ngIf="ruta.estado === 'activa'">
-              <div class="progress-label">
-                <span>Progreso</span>
-                <span>{{ ruta.progreso }}%</span>
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill" [style.width.%]="ruta.progreso"></div>
-              </div>
-            </div>
-            
-            <div class="route-actions">
-              <button class="btn-link" (click)="verRuta(ruta.id)">
-                Ver detalles →
-              </button>
-              <button class="btn-start" *ngIf="ruta.estado === 'programada'" (click)="iniciarRecorrido(ruta.id)">
-                <i class="fa-solid fa-play"></i>
-                Iniciar Recorrido
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
     </main>
   </div>
+</div>
 
-  <!-- ========== MODALS ========== -->
-
-  <!-- Modal Registrar Ruta -->
-  <div class="modal-overlay" *ngIf="showRegistrarRutaModal()" (click)="cerrarModalRegistrarRuta()">
-    <div class="modal-container" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2>Registrar Nueva Ruta</h2>
-        <button class="close-btn" (click)="cerrarModalRegistrarRuta()">✕</button>
-      </div>
-      <div class="modal-body">
-        <form (submit)="$event.preventDefault(); guardarRuta()">
-          <div class="form-group">
-            <label>Nombre de la Ruta</label>
-            <input type="text" [value]="formRuta().nombre" (input)="formRuta().nombre = $any($event.target).value" placeholder="Ej: Ruta Norte - Sector A" required>
-          </div>
-          <div class="form-group">
-            <label>Zona</label>
-            <input type="text" [value]="formRuta().zona" (input)="formRuta().zona = $any($event.target).value" placeholder="Ej: Zona Norte" required>
-          </div>
-          <div class="form-group">
-            <label>Horario</label>
-            <input type="time" [value]="formRuta().horario" (input)="formRuta().horario = $any($event.target).value" required>
-          </div>
-          <div class="modal-actions">
-            <button type="button" class="btn-cancel" (click)="cerrarModalRegistrarRuta()">Cancelar</button>
-            <button type="submit" class="btn-submit">Guardar Ruta</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Registrar Vehículo -->
- <div class="modal-overlay" *ngIf="showRegistrarVehiculoModal()" (click)="cerrarModalRegistrarVehiculo()">
+<div class="modal-overlay" *ngIf="showRegistrarRutaModal()" (click)="cerrarModalRegistrarRuta()">
   <div class="modal-container" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h2>Registrar Vehículo</h2>
-      <button class="close-btn" (click)="cerrarModalRegistrarVehiculo()">x</button>
-    </div>
+    <div class="modal-header"><h2>Registrar Nueva Ruta</h2><button class="close-btn" (click)="cerrarModalRegistrarRuta()">✕</button></div>
     <div class="modal-body">
-      <form (submit)="$event.preventDefault(); guardarVehiculo()">
-        <!-- PLACA -->
-        <div class="form-group">
-          <label>Placa</label>
-          <input 
-            type="text"
-            [value]="formVehiculo().placa"
-            (input)="formVehiculo().placa = $any($event.target).value"
-            placeholder="Ej: ABC-123"
-            required
-          >
-        </div>
-        <!-- MODELO -->
-        <div class="form-group">
-          <label>Modelo</label>
-          <input 
-            type="text"
-            [value]="formVehiculo().modelo"
-            (input)="formVehiculo().modelo = $any($event.target).value"
-            placeholder="Ej: Volquete 2020"
-            required
-          >
-        </div>
-        <!-- MARCA -->
-        <div class="form-group">
-          <label>Marca</label>
-          <input 
-            type="text"
-            [value]="formVehiculo().marca"
-            (input)="formVehiculo().marca = $any($event.target).value"
-            placeholder="Ej: Chevrolet"
-            required
-          >
-        </div>
-
-        <!-- ESTADO (BOOLEAN) -->
-        <div class="form-group">
-          <label>Estado Inicial</label>
-          <select 
-            [value]="formVehiculo().activo"
-            (change)="formVehiculo().activo = ($any($event.target).value === 'true')"
-          >
-            <option value="true">Activo</option>
-            <option value="false">Inactivo</option>
-          </select>
-        </div>
-
-        <!-- ACCIONES -->
+      <form (submit)="$event.preventDefault(); guardarRuta()">
+        <div class="form-group"><label>Nombre</label><input type="text" [value]="formRuta().nombre" (input)="formRuta().nombre = $any($event.target).value" required></div>
+        <div class="form-group"><label>Zona</label><input type="text" [value]="formRuta().zona" (input)="formRuta().zona = $any($event.target).value" required></div>
+        <div class="form-group"><label>Horario</label><input type="time" [value]="formRuta().horario" (input)="formRuta().horario = $any($event.target).value" required></div>
         <div class="modal-actions">
-          <button type="button" class="btn-cancel" (click)="cerrarModalRegistrarVehiculo()">Cancelar</button>
-          <button type="submit" class="btn-submit">Registrar Vehículo</button>
+          <button type="button" class="btn-cancel" (click)="cerrarModalRegistrarRuta()">Cancelar</button>
+          <button type="button" class="btn-secondary" (click)="trazarRuta()"><i class="fa-solid fa-pen-nib"></i> Trazar en Mapa</button>
+          <button type="submit" class="btn-submit">Guardar</button>
         </div>
       </form>
     </div>
   </div>
 </div>
 
-
-  <!-- Modal Ingresar Dirección -->
-  <div class="modal-overlay" *ngIf="showIngresarDireccionModal()" (click)="cerrarModalIngresarDireccion()">
-    <div class="modal-container" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2>Ingresar Dirección</h2>
-        <button class="close-btn" (click)="cerrarModalIngresarDireccion()">✕</button>
-      </div>
-      <div class="modal-body">
-        <form (submit)="$event.preventDefault(); guardarDireccion()">
-          <div class="form-group">
-            <label>Seleccionar Ruta</label>
-            <select [value]="formDireccion().rutaId" (change)="formDireccion().rutaId = +$any($event.target).value">
-              <option *ngFor="let ruta of rutas()" [value]="ruta.id">{{ ruta.nombre }}</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Dirección de Recolección</label>
-            <input type="text" [value]="formDireccion().direccion" (input)="formDireccion().direccion = $any($event.target).value" placeholder="Ej: Calle 5 # 10-20" required>
-          </div>
-          <div class="form-group">
-            <label>Orden en la ruta</label>
-            <input type="number" [value]="formDireccion().orden" (input)="formDireccion().orden = +$any($event.target).value" min="1" required>
-          </div>
-          <div class="modal-actions">
-            <button type="button" class="btn-cancel" (click)="cerrarModalIngresarDireccion()">Cancelar</button>
-            <button type="submit" class="btn-submit">Agregar Dirección</button>
-          </div>
-        </form>
-      </div>
+<div class="modal-overlay" *ngIf="showRegistrarVehiculoModal()" (click)="cerrarModalRegistrarVehiculo()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header"><h2>Registrar Vehículo</h2><button class="close-btn" (click)="cerrarModalRegistrarVehiculo()">✕</button></div>
+    <div class="modal-body">
+      <form (submit)="$event.preventDefault(); guardarVehiculo()">
+        <div class="form-group"><label>Placa</label><input type="text" [value]="formVehiculo().placa" (input)="formVehiculo().placa = $any($event.target).value" required></div>
+        <div class="form-group"><label>Modelo</label><input type="text" [value]="formVehiculo().modelo" (input)="formVehiculo().modelo = $any($event.target).value" required></div>
+        <div class="form-group"><label>Marca</label><input type="text" [value]="formVehiculo().marca" (input)="formVehiculo().marca = $any($event.target).value" required></div>
+        <div class="form-group"><label>Estado</label><select [value]="formVehiculo().activo" (change)="formVehiculo().activo = ($any($event.target).value === 'true')"><option value="true">Activo</option><option value="false">Inactivo</option></select></div>
+        <div class="modal-actions"><button type="button" class="btn-cancel" (click)="cerrarModalRegistrarVehiculo()">Cancelar</button><button type="submit" class="btn-submit">Registrar</button></div>
+      </form>
     </div>
   </div>
+</div>
 
+<div class="modal-overlay" *ngIf="showIngresarDireccionModal()" (click)="cerrarModalIngresarDireccion()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header"><h2>Ingresar Dirección</h2><button class="close-btn" (click)="cerrarModalIngresarDireccion()">✕</button></div>
+    <div class="modal-body">
+      <form (submit)="$event.preventDefault(); guardarDireccion()">
+        <div class="form-group"><label>Ruta</label><select [value]="formDireccion().rutaId" (change)="formDireccion().rutaId = +$any($event.target).value"><option *ngFor="let r of rutas()" [value]="r.id">{{ r.nombre }}</option></select></div>
+        <div class="form-group"><label>Dirección</label><input type="text" [value]="formDireccion().direccion" (input)="formDireccion().direccion = $any($event.target).value" required></div>
+        <div class="form-group"><label>Orden</label><input type="number" [value]="formDireccion().orden" (input)="formDireccion().orden = +$any($event.target).value" min="1" required></div>
+        <div class="modal-actions"><button type="button" class="btn-cancel" (click)="cerrarModalIngresarDireccion()">Cancelar</button><button type="submit" class="btn-submit">Agregar</button></div>
+      </form>
+    </div>
+  </div>
 </div>

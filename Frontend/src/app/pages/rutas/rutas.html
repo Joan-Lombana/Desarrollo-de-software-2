@@ -1,0 +1,37 @@
+<div class="app-layout">
+  <app-sidebar [isOpen]="sidebarOpen()" (closeSidebar)="toggleSidebar()"></app-sidebar>
+  <div class="main-content" [class.sidebar-open]="sidebarOpen()">
+    <app-header (toggleSidebar)="toggleSidebar()"></app-header>
+    <main class="page-content">
+      <div class="page-header"><h1>Gestión de Rutas</h1><p>Administra las rutas de recolección</p></div>
+      
+      <!-- Modal Editar -->
+      <div class="modal-overlay" *ngIf="editando()">
+        <div class="modal-box">
+          <h3>Editar Ruta</h3>
+          <div class="form-group"><label>Nombre</label><input [(ngModel)]="editando()!.nombre"></div>
+          <div class="form-group"><label>Zona</label><input [(ngModel)]="editando()!.zona"></div>
+          <div class="form-group"><label>Horario</label><input [(ngModel)]="editando()!.horario"></div>
+          <div class="actions"><button class="btn-cancel" (click)="cancelarEdicion()">Cancelar</button><button class="btn-save" (click)="guardarEdicion()">Guardar</button></div>
+        </div>
+      </div>
+
+      <div class="rutas-list" *ngIf="rutas().length > 0; else noRutas">
+        <div class="ruta-card" *ngFor="let ruta of rutas()">
+          <div class="ruta-info">
+            <h3>{{ ruta.nombre }}</h3>
+            <p><i class="fa-solid fa-clock"></i> {{ ruta.horario }}</p>
+            <p><i class="fa-solid fa-map-marker-alt"></i> {{ ruta.zona }}</p>
+          </div>
+          <div class="ruta-actions">
+            <span class="status" [class]="ruta.estado">{{ ruta.estado }}</span>
+            <button class="btn-icon" (click)="visualizarRuta(ruta)" title="Ver en mapa"><i class="fa-solid fa-eye"></i></button>
+            <button class="btn-icon" (click)="editarRuta(ruta)" title="Editar"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn-icon danger" (click)="eliminarRuta(ruta)" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+      </div>
+      <ng-template #noRutas><div class="empty-state"><i class="fa-solid fa-route"></i><p>No hay rutas registradas</p></div></ng-template>
+    </main>
+  </div>
+</div>
