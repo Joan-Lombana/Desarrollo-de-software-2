@@ -6,21 +6,41 @@
       <div class="page-header"><h1>Gestión de Vehículos</h1><p>Administra los vehículos registrados</p></div>
       
       <!-- Modal Editar -->
-      <div class="modal-overlay" *ngIf="editando()">
-        <div class="modal-box">
-          <h3>Editar Vehículo</h3>
-          <div class="form-group"><label>Placa</label><input [(ngModel)]="editando()!.placa"></div>
-          <div class="form-group"><label>Marca</label><input [(ngModel)]="editando()!.marca"></div>
-          <div class="form-group"><label>Modelo</label><input [(ngModel)]="editando()!.modelo"></div>
-          <div class="form-group"><label>Estado</label>
-            <select [(ngModel)]="editando()!.activo">
-              <option [ngValue]="true">Activo</option>
-              <option [ngValue]="false">Inactivo</option>
-            </select>
-          </div>
-          <div class="actions"><button class="btn-cancel" (click)="cancelarEdicion()">Cancelar</button><button class="btn-save" (click)="guardarEdicion()">Guardar</button></div>
-        </div>
-      </div>
+      <!-- Modal Editar -->
+<div class="modal-overlay" *ngIf="editando()">
+  <div class="modal-box">
+    <h3>Editar Vehículo</h3>
+
+    <div class="form-group">
+      <label>Placa</label>
+      <input [ngModel]="editando()?.placa" (ngModelChange)="actualizarCampo('placa', $event)">
+    </div>
+
+    <div class="form-group">
+      <label>Marca</label>
+      <input [ngModel]="editando()?.marca" (ngModelChange)="actualizarCampo('marca', $event)">
+    </div>
+
+    <div class="form-group">
+      <label>Modelo</label>
+      <input [ngModel]="editando()?.modelo" (ngModelChange)="actualizarCampo('modelo', $event)">
+    </div>
+
+    <div class="form-group">
+      <label>Estado</label>
+      <select [ngModel]="editando()?.activo" (ngModelChange)="actualizarCampo('activo', $event)">
+        <option [ngValue]="true">Activo</option>
+        <option [ngValue]="false">Inactivo</option>
+      </select>
+    </div>
+
+    <div class="actions">
+      <button class="btn-cancel" (click)="cancelarEdicion()">Cancelar</button>
+      <button class="btn-save" (click)="guardarEdicion()">Guardar</button>
+    </div>
+  </div>
+</div>
+
 
       <div class="vehiculos-list" *ngIf="vehiculos().length > 0; else noVehiculos">
         <div class="vehiculo-card" *ngFor="let v of vehiculos()">

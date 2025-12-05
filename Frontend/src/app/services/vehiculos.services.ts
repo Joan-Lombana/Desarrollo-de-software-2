@@ -32,25 +32,17 @@ export class VehiculosService {
   // 📌 Actualizar vehículo
   // -------------------------------
   actualizarVehiculo(vehiculoId: string, datos: any, perfilId: string) {
-    const params = new HttpParams().set('perfil_id', perfilId);
-    const body = { ...datos, perfil_id: perfilId };
-
-    console.log("✏️ PUT ->", `${this.baseUrl}/vehiculos/${vehiculoId}`, 
-      "params:", params.toString(),
-      "body:", body
-    );
-
-    return this.http.put(`${this.baseUrl}/vehiculos/${vehiculoId}`, body, { params });
-  }
+      const params = new HttpParams().set('perfil_id', perfilId);
+      console.log("✏️ PUT ->", `${this.baseUrl}/vehiculos/${vehiculoId}`, "body:", datos, "perfil_id:", perfilId);
+      return this.http.put(`${this.baseUrl}/vehiculos/${vehiculoId}`, datos, { params });
+    }
 
   // -------------------------------
   // 📌 Eliminar vehículo
   // -------------------------------
   eliminarVehiculo(vehiculoId: string, perfilId: string) {
     const params = new HttpParams().set('perfil_id', perfilId);
-
-    console.log("🗑️ DELETE ->", `${this.baseUrl}/vehiculos/${vehiculoId}`, "params:", params.toString());
-    
+    console.log("🗑️ DELETE ->", `${this.baseUrl}/vehiculos/${vehiculoId}`, "perfil_id:", perfilId);
     return this.http.delete(`${this.baseUrl}/vehiculos/${vehiculoId}`, { params });
   }
 }

@@ -48,16 +48,31 @@ export class VehiculosComponent implements OnInit {
   }
 
   eliminarVehiculo(v: Vehiculo) {
+    console.log('🟢 Intentando eliminar vehículo:', v);
     if (confirm(`¿Eliminar vehículo ${v.placa}?`)) {
-      this.vehiculosService.eliminarVehiculo(v.id, this.perfilId).subscribe({
-        next: () => this.cargarVehiculos(),
-        error: () => alert('Error eliminando vehículo')
+      console.log('✅ Confirmado eliminar vehículo ID:', v.id);
+      this.vehiculosService.eliminarVehiculo(v.id, this.perfilId).subscribe({  // <- PASAR perfilId
+        next: () => {
+          console.log('🚀 Vehículo eliminado correctamente');
+          this.cargarVehiculos();
+        },
+        error: (err) => {
+          console.error('❌ Error eliminando vehículo:', err);
+          alert('Error eliminando vehículo');
+        }
       });
     }
   }
 
-  editarVehiculo(v: Vehiculo) { 
-    this.editando.set({ ...v }); 
+  editarVehiculo(v: Vehiculo) {
+    // Crear una copia del objeto para editar
+    this.editando.set({ ...v });
+  }
+
+  actualizarCampo(key: keyof Vehiculo, value: any) {
+    const v = this.editando();
+    if (!v) return;
+    this.editando.set({ ...v, [key]: value });
   }
 
   cancelarEdicion() { 
@@ -68,7 +83,7 @@ export class VehiculosComponent implements OnInit {
     const v = this.editando();
     if (!v) return;
 
-    this.vehiculosService.actualizarVehiculo(v.id, v, this.perfilId).subscribe({
+    this.vehiculosService.actualizarVehiculo(v.id, v, this.perfilId).subscribe({ // <- PASAR perfilId
       next: () => {
         this.editando.set(null);
         this.cargarVehiculos();
@@ -77,3 +92,4 @@ export class VehiculosComponent implements OnInit {
     });
   }
 }
+
