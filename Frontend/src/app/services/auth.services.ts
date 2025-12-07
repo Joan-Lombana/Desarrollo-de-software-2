@@ -30,20 +30,24 @@ export class AuthService {
     window.location.href = `${this.apiUrl}/google/login`;
   }
 
-  getProfile(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/profile`, { withCredentials: true }).pipe(
-      tap((user: any) => {
-        this.currentUser.set(user);
-      })
-    );
+ getProfile(): Observable<any> {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return of(null); // no hay sesión activa
   }
 
+    return this.http.get(`${this.apiUrl}/profile`, { 
+    headers: { Authorization: `Bearer ${token}` } 
+  }).pipe(
+    tap(user => this.currentUser.set(user))
+  );
 
-
-logout(): Observable<boolean> {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-  return of(true);  // ← devolvemos un observable válido
 }
+
+
+  logout(): void {
+    localStorage.removeItem('token');
+    this.currentUser.set(null);
+  }
 
 }

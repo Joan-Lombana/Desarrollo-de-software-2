@@ -25,9 +25,11 @@
           </div>
 
           <div class="user-info">
-            <span class="user-name">{{ currentUser().nombre }}</span>
-            <span class="user-role">{{ currentUser().rol || 'Usuario' }}</span>
+            <span class="user-name">{{ currentUser()?.nombre }}</span>
+            <span class="user-role">{{ currentUser()?.rol }}</span>  <!-- usa rol directamente -->
+
           </div>
+
           <i class="fa-solid fa-chevron-down"></i>
         </button>
 
@@ -42,8 +44,7 @@
               </div>
 
               <div>
-                <h3>{{ currentUser().nombre }}</h3>
-                <p>{{ currentUser().correo }}</p>
+                <p> {{ currentUser()?.correo }}</p>
               </div>
             </div>
           </div>

@@ -234,7 +234,7 @@ $hover-bg: #f9fafb;
 .dropdown {
   position: absolute;
   top: 120%;
-  right: 0;
+  right: -0.5rem;
   width: 320px;
   background: white;
   border-radius: 16px;
@@ -245,7 +245,7 @@ $hover-bg: #f9fafb;
   animation: slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
   &.user-dropdown {
-    width: 260px;
+    width: 270px;
   }
 
   &.notifications-dropdown {

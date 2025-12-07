@@ -1,14 +1,24 @@
 import { Routes } from '@angular/router';
-import { InicioComponent } from './pages/inicio/inicio';
 import { PrincipalComponent } from './pages/principal/principal';
 import { RutasComponent } from './pages/rutas/rutas';
 import { VehiculosComponent } from './pages/vehiculos/vehiculos';
 import { AuthCallback } from './components/authcallback/authcallback';
+import { NoBackLoginGuard } from './guards/no-back-login-guard';
 
 export const routes: Routes = [
-  { path: "", component: InicioComponent },
+  {
+    path: "",
+    loadComponent: () =>
+      import('./pages/inicio/inicio').then(m => m.InicioComponent),
+    canActivate: [NoBackLoginGuard]
+  },
+
   { path: "principal", component: PrincipalComponent },
   { path: "rutas", component: RutasComponent },
   { path: "vehiculos", component: VehiculosComponent },
-  { path: "auth/callback", component: AuthCallback }
+
+  { path: "auth-callback", component: AuthCallback },
+
+  { path: "**", redirectTo: "" }
 ];
+

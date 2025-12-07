@@ -35,8 +35,9 @@ $white: #ffffff;
   
     .navbar-container {
       max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 2rem;
+      margin-left: 2rem;
+      margin-top: 1rem;
+      padding: 0rem;
       height: 80px;
       display: flex;
       align-items: center;
@@ -45,20 +46,30 @@ $white: #ffffff;
 
   .nav-brand {
     display: flex;
+    //background-color: #1f2937;
     align-items: center;
     gap: 8px; // lo que tú quieres
 
-    .brand-logo {
-      width: 35px;
-      height: auto;
-    }
-
     .brand-name {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
+      font-family: 'Poppins', sans-serif;
       font-weight: 700;
       color: $white;
     }
-  }  
+  } 
+  
+  .logo{
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+    overflow: hidden;
+
+    img {
+      width: 5rem;
+      height: auto;
+      object-fit: cover;
+    }
+  }
 
 
   

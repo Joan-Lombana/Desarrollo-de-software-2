@@ -50,11 +50,8 @@ export class HeaderComponent implements OnInit {
     }
   ]);
 
-  currentUser = signal({
-  nombre: "Estefany",
-  correo: "estefany@test.com",
-  rol: "Admin"
-  });
+ currentUser = this.authService.currentUser;
+
 
   // Output para toggle del sidebar en mobile
   toggleSidebar = output<void>();
@@ -63,12 +60,14 @@ export class HeaderComponent implements OnInit {
   unreadCount = signal(2);
 
   ngOnInit() {
-    if (!this.authService.currentUser()) {
-      this.authService.getProfile().subscribe({
-        error: () => console.log('No active session')
-      });
-    }
+  if (!this.currentUser()) { // Si no hay usuario
+    this.authService.getProfile().subscribe({
+      next: (user) => console.log('Perfil cargado', user),
+      error: () => console.log('No hay sesión activa')
+    });
   }
+}
+
 
   onSearch() {
     console.log('Buscando:', this.searchQuery());
@@ -109,17 +108,12 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout().subscribe({
-      next: () => {
-        this.router.navigate(['/']);
-        this.showUserMenu.set(false);
-      },
-      error: () => {
-        // Incluso si hay error, navegar igual al inicio
-        this.router.navigate(['/']);
-      }
-    });
+  this.authService.logout();  // limpia localStorage y signal
+  this.router.navigate(['/login']);
+  this.showUserMenu.set(false);
   }
+
+
 
   goToProfile() {
     this.showUserMenu.set(false);
