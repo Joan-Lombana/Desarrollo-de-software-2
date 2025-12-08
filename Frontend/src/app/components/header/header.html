@@ -16,14 +16,9 @@
     <div class="header-actions">
           
       <!-- Usuario -->
-      <div class="user-wrapper" *ngIf="currentUser()">
+      <div class="user-wrapper" *ngIf="currentUser() as user">
         <button class="user-button" (click)="toggleUserMenu()">
-          
-          <!-- ICONO DE PERFIL (NO INICIAL, NO IMAGEN) -->
-          <div class="user-avatar">
-            <i class="fa-regular fa-user"></i>
-          </div>
-
+          <div class="user-avatar"><i class="fa-regular fa-user"></i></div>
           <div class="user-info">
             <span class="user-name">{{ currentUser()?.nombre }}</span>
             <span class="user-role">{{ currentUser()?.rol }}</span>  <!-- usa rol directamente -->

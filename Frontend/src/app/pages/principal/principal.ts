@@ -8,13 +8,16 @@ import { VehiculosService } from '../../services/vehiculos.services';
 import { RutasService } from '../../services/rutas.services';
 import { LeafletMapService } from '../../services/leaflet-map.services';
 
+
 interface Ruta { 
-  id: number; 
-  nombre: string; 
+  id: string;                   // UUID
+  nombre_ruta: string; 
   horario: string; 
   zona: string; 
   estado: string; 
+  shape: string;                // 👈 NECESARIO
 }
+
 interface Vehiculo { 
   id: string; 
   placa: string; 
@@ -22,27 +25,32 @@ interface Vehiculo {
   marca: string; 
   activo: boolean;
 }
+
 interface Stats { 
   vehiculosActivos: number; 
   rutasCompletadas: number; 
   rutasActivas: number; 
 }
+
 interface FormRuta { 
   nombre: string; 
   zona: string; 
   horario: string; 
 }
+
 interface FormVehiculo { 
   placa: string; 
   modelo: string; 
   marca: string; 
   activo: boolean; 
 }
+
 interface FormDireccion { 
-  rutaId: number; 
+  rutaId: string; 
   direccion: string; 
   orden: number; 
 }
+
 
 @Component({
   selector: 'app-principal',
@@ -52,13 +60,16 @@ interface FormDireccion {
   styleUrls: ['./principal.scss']
 })
 export class PrincipalComponent implements OnInit {
+  
   private vehiculosService = inject(VehiculosService);
   private rutasService = inject(RutasService);
   private leafletMapService = inject(LeafletMapService);
   private perfilId = 'bcadd725-99a9-458f-bb7f-2eea173c0eb3';
+  private mapService = inject(LeafletMapService);
 
   sidebarOpen = signal(true);
   vehiculoSeleccionado = signal<Vehiculo | null>(null);
+
   showRegistrarRutaModal = signal(false);
   showRegistrarVehiculoModal = signal(false);
   showIngresarDireccionModal = signal(false);
@@ -66,43 +77,125 @@ export class PrincipalComponent implements OnInit {
   
   formRuta = signal<FormRuta>({ nombre: '', zona: '', horario: '' });
   formVehiculo = signal<FormVehiculo>({ placa: '', modelo: '', marca: '', activo: true });
-  formDireccion = signal<FormDireccion>({ rutaId: 0, direccion: '', orden: 1 });
+  formDireccion = signal<FormDireccion>({ rutaId: '', direccion: '', orden: 1 });
   
   rutas = signal<Ruta[]>([]);
+  rutaSeleccionada = signal<string | null>(null);
+
   vehiculos = signal<Vehiculo[]>([]);
   stats = signal<Stats>({ vehiculosActivos: 0, rutasCompletadas: 0, rutasActivas: 0 });
 
+
+  // ---------------------------------------------------------
+  // INICIO
+  // ---------------------------------------------------------
   ngOnInit() {
     this.cargarRutas();
     this.cargarVehiculos();
   }
 
+  // ---------------------------------------------------------
+  // CARGAR RUTAS
+  // ---------------------------------------------------------
   cargarRutas() {
     this.rutasService.getRutas(this.perfilId).subscribe({
+      
       next: (resp: any) => {
-        console.log('Rutas recibidas:', resp);
-        const arr = Array.isArray(resp) ? resp : (resp.data || resp.rutas || []);
-        this.rutas.set(arr);
-        this.actualizarStats();
+        console.log("📥 Rutas recibidas:", resp);
+
+        const data = Array.isArray(resp.data) ? resp.data : [];
+
+        this.rutas.set(data);
+
+        console.log("📦 Rutas almacenadas en signal:", this.rutas());
       },
+
       error: (err) => {
-        console.error('Error cargando rutas:', err);
+        console.error('❌ Error cargando rutas', err);
         this.rutas.set([]);
-      }
+      },
     });
   }
 
+  // ---------------------------------------------------------
+  // SELECCIONAR RUTA DESDE EL SELECT
+  // ---------------------------------------------------------
+  seleccionarRuta(event: Event) {
+  const target = event.target as HTMLSelectElement;
+  const rutaId = target.value; // UUID string
+
+  this.rutaSeleccionada.set(rutaId);
+
+  if (!rutaId) {
+    console.log("↩ No se seleccionó ruta — limpiando mapa");
+    this.mapService.resetMap();
+    return;
+  }
+
+  console.log("📌 Ruta seleccionada:", rutaId);
+
+  // Buscar en rutas cargadas
+  const ruta = this.rutas().find(r => r.id === rutaId);
+
+  if (!ruta) {
+    console.error("❌ No se encontró la ruta en la lista cargada:", rutaId);
+    return;
+  }
+
+  console.log("📄 Ruta encontrada:", ruta);
+
+  if (!ruta.shape) {
+    console.error("❌ Esta ruta no tiene shape:", ruta);
+    return;
+  }
+
+  // Parsear shape
+  let shape;
+  try {
+    shape = JSON.parse(ruta.shape);
+  } catch (e) {
+    console.error("❌ Error parseando shape:", e, ruta.shape);
+    return;
+  }
+
+  // ✅ Enviar al servicio para mostrar en el mapa
+  let coords: [number, number][] = [];
+
+  if (shape.type === "LineString") {
+    coords = shape.coordinates;
+  } else if (shape.type === "MultiLineString") {
+    // Para MultiLineString tomamos la primera línea (o podrías combinar todas)
+    coords = shape.coordinates.flat();
+  } else {
+    console.error("❌ Tipo de geometría no soportado:", shape.type);
+    return;
+  }
+
+  console.log("🗺 Coordenadas enviadas al mapa:", coords);
+
+  this.mapService.showRoute(coords);
+  }
+
+
+  // ---------------------------------------------------------
+  // VEHÍCULOS
+  // ---------------------------------------------------------
   cargarVehiculos() {
     this.vehiculosService.getVehiculos(this.perfilId).subscribe({
       next: (resp: any) => {
-        console.log('Vehículos recibidos:', resp); // Para depuración
-        const arr = Array.isArray(resp) ? resp : (resp.data || resp.vehiculos || []);
+        console.log('📥 Vehículos:', resp);
+
+        const arr = Array.isArray(resp) ? resp : (resp.data || []);
         this.vehiculos.set(arr);
-        if (arr.length > 0) this.vehiculoSeleccionado.set(arr[0]);
+
+        if (arr.length > 0)
+          this.vehiculoSeleccionado.set(arr[0]);
+
         this.actualizarStats();
       },
+
       error: (err) => {
-        console.error('Error cargando vehículos:', err);
+        console.error('❌ Error cargando vehículos:', err);
         this.vehiculos.set([]);
       }
     });
@@ -146,15 +239,11 @@ export class PrincipalComponent implements OnInit {
   }
 
   abrirModalIngresarDireccion() { 
-    this.formDireccion.set({ 
-      rutaId: this.rutas()[0]?.id || 0, 
-      direccion: '', 
-      orden: 1 }); 
-      this.showIngresarDireccionModal.set(true); 
-    }
-  cerrarModalIngresarDireccion() { 
-    this.showIngresarDireccionModal.set(false); 
+    this.formDireccion.set({ rutaId: this.rutas()[0]?.id || '', direccion: '', orden: 1 });
+    this.showIngresarDireccionModal.set(true); 
   }
+
+  cerrarModalIngresarDireccion() { this.showIngresarDireccionModal.set(false); }
 
   guardarRuta() {
     const form = this.formRuta();
@@ -174,9 +263,16 @@ export class PrincipalComponent implements OnInit {
 
   guardarVehiculo() {
     const form = this.formVehiculo();
-    if (!form.placa || !form.modelo || !form.marca) { alert('Completa todos los campos'); return; }
+
+    if (!form.placa || !form.modelo || !form.marca) { 
+      alert('Completa todos los campos'); 
+      return; 
+    }
+
     this.vehiculosService.registrarVehiculo(form, this.perfilId).subscribe({
-      next: () => { this.cargarVehiculos(); this.cerrarModalRegistrarVehiculo(); 
+      next: () => { 
+        this.cargarVehiculos(); 
+        this.cerrarModalRegistrarVehiculo(); 
       },
       error: () => alert('Error registrando vehículo')
     });
@@ -184,9 +280,14 @@ export class PrincipalComponent implements OnInit {
 
   guardarDireccion() {
     const form = this.formDireccion();
-    if (!form.direccion || form.rutaId === 0) { 
-      alert('Completa todos los campos'); return; 
+
+    if (!form.direccion || !form.rutaId) { 
+      alert('Completa todos los campos'); 
+      return; 
     }
+
     this.cerrarModalIngresarDireccion();
   }
+
+  
 }

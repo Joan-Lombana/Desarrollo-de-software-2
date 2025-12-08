@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as L from 'leaflet';
 import { HttpClient } from '@angular/common/http';
+import * as GeoJSON from 'geojson';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,8 @@ export class LeafletMapService {
 
   private waypoints: L.LatLng[] = [];
   private pointLayers: L.Layer[] = [];
-
   private routeLayer: L.GeoJSON | null = null;
+  private currentRouteLayer: L.GeoJSON | null = null;
 
   private MAPBOX_TOKEN = 'pk.eyJ1Ijoiam9hbjk5IiwiYSI6ImNtaXBwc2FwcDA4cXYzZ3B2djMzdWsxZDQifQ.jpYs7Myh7Pybt29kWrupog';
 
@@ -35,11 +36,9 @@ export class LeafletMapService {
     this.map = L.map(containerId).setView([3.8801, -77.0312], 14);
 
     L.tileLayer(
-    `https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=${this.MAPBOX_TOKEN}`,
-    { tileSize: 512, zoomOffset: -1, attribution: '© Mapbox © OpenStreetMap' }
+      `https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=${this.MAPBOX_TOKEN}`,
+      { tileSize: 512, zoomOffset: -1, attribution: '© Mapbox © OpenStreetMap' }
     ).addTo(this.map);
-
-
 
     this.map.getContainer().style.cursor = 'grab';
   }
@@ -48,7 +47,7 @@ export class LeafletMapService {
     return this.routeCreated;
   }
 
-  /** Activar selección de puntos */
+  /** Activar selección de puntos para trazar ruta manual */
   enablePointSelection() {
     if (!this.map) return;
 
@@ -67,6 +66,7 @@ export class LeafletMapService {
     }
   }
 
+  /** Desactivar selección de puntos */
   disablePointSelection() {
     if (!this.map) return;
 
@@ -75,6 +75,7 @@ export class LeafletMapService {
     this.map.off('click', this.selectPoint);
   }
 
+  /** Evento click para seleccionar un punto */
   private selectPoint = (e: L.LeafletMouseEvent) => {
     this.waypoints.push(e.latlng);
 
@@ -88,6 +89,7 @@ export class LeafletMapService {
     this.pointLayers.push(point);
   };
 
+  /** Retroceder último punto agregado */
   undoLastPoint() {
     if (!this.map) return;
 
@@ -126,6 +128,7 @@ export class LeafletMapService {
     });
   }
 
+  /** Limpiar marcadores de puntos */
   private clearMarkers() {
     if (!this.map) return;
 
@@ -133,6 +136,7 @@ export class LeafletMapService {
     this.pointLayers = [];
   }
 
+  /** Reset completo del mapa */
   private resetAll() {
     if (!this.map) return;
 
@@ -141,10 +145,14 @@ export class LeafletMapService {
       this.routeLayer = null;
     }
 
+    if (this.currentRouteLayer) {
+      this.map.removeLayer(this.currentRouteLayer);
+      this.currentRouteLayer = null;
+    }
+
     this.clearMarkers();
     this.waypoints = [];
     this.routeCreated = false;
-
   }
 
   /** Devuelve GeoJSON listo para guardar */
@@ -175,20 +183,42 @@ export class LeafletMapService {
     return null;
   }
 
+  /** Reset manual de mapa */
   resetMap() {
     this.resetAll();
   }
 
+  //** Mostrar ruta guardada en coordenadas [lng, lat] */
+  showRoute(coordinates: [number, number][]) {
+    if (!this.map || coordinates.length < 2) return;
 
-  /** Cargar ruta guardada */
-  addGeoJsonLayer(geojson: any) {
-    if (!this.map) return;
+    // Elimina la capa anterior si existe
+    if (this.currentRouteLayer) {
+      this.map.removeLayer(this.currentRouteLayer);
+      this.currentRouteLayer = null;
+    }
 
-    L.geoJSON(geojson, {
-      style: { weight: 4, opacity: 0.9, color: '#007BFF' }
+    // Crea un Feature GeoJSON de tipo LineString
+    const geojson: GeoJSON.Feature<GeoJSON.LineString> = {
+      type: "Feature",
+      properties: {},
+      geometry: { type: "LineString", coordinates }
+    };
+
+    // Añade la ruta al mapa
+    this.currentRouteLayer = L.geoJSON(geojson, {
+      style: { color: '#007BFF', weight: 4 }
     }).addTo(this.map);
+
+    // Ajusta los bounds del mapa
+    // Leaflet fitBounds acepta un array de tuplas [lat, lng]
+    const latLngs: [number, number][] = coordinates.map(c => [c[1], c[0]]);
+    this.map.fitBounds(latLngs);
   }
+
 }
+
+
 
 
 

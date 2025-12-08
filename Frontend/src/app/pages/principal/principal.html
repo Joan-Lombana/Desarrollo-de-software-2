@@ -18,12 +18,18 @@
         <section class="map-section">
           <div class="section-card">
             <div class="card-header">
-              <h2>Mapa</h2>
-              <select class="select-route"><option value="">Todas las rutas</option><option *ngFor="let ruta of rutas()" [value]="ruta.id">{{ ruta.nombre }}</option></select>
+              <h2>Mapa en Tiempo Real</h2>
+              <select class="select-route" (change)="seleccionarRuta($event)">
+                <option value="">Todas las rutas</option>
+                <option *ngFor="let ruta of rutas()" [value]="ruta.id">{{ ruta.nombre_ruta }}</option>
+              </select>
+
+
+
             </div>
             <div class="map-container">
               <app-mapa></app-mapa>
-              <app-herramientasmapa *ngIf="showRouteTools()"></app-herramientasmapa>
+              <app-herramientasmapa *ngIf="showRouteTools()"  (rutaGuardada)="cargarRutas()"></app-herramientasmapa>
             </div>
           </div>
         </section>
@@ -86,7 +92,7 @@
     <div class="modal-header"><h2>Ingresar Dirección</h2><button class="close-btn" (click)="cerrarModalIngresarDireccion()">✕</button></div>
     <div class="modal-body">
       <form (submit)="$event.preventDefault(); guardarDireccion()">
-        <div class="form-group"><label>Ruta</label><select [value]="formDireccion().rutaId" (change)="formDireccion().rutaId = +$any($event.target).value"><option *ngFor="let r of rutas()" [value]="r.id">{{ r.nombre }}</option></select></div>
+        
         <div class="form-group"><label>Dirección</label><input type="text" [value]="formDireccion().direccion" (input)="formDireccion().direccion = $any($event.target).value" required></div>
         <div class="form-group"><label>Orden</label><input type="number" [value]="formDireccion().orden" (input)="formDireccion().orden = +$any($event.target).value" min="1" required></div>
         <div class="modal-actions"><button type="button" class="btn-cancel" (click)="cerrarModalIngresarDireccion()">Cancelar</button><button type="submit" class="btn-submit">Agregar</button></div>

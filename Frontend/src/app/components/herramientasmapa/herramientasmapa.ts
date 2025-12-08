@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component,EventEmitter, Output } from '@angular/core';
 import { LeafletMapService } from '../../services/leaflet-map.services';
-import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RutasService } from '../../services/rutas.services';
+
+
 
 
 @Component({
@@ -14,15 +15,16 @@ import { RutasService } from '../../services/rutas.services';
 })
 export class Herramientasmapa {
 
+  @Output() rutaGuardada = new EventEmitter<void>();
+
   showSaveModal = false;
   nombreRuta = "";
   modoDibujo = false; // ← nuevo estado
 
-
   constructor(
   private mapService: LeafletMapService,
-  private http: HttpClient,
   private api: RutasService
+
     
   ) {}
 
@@ -107,6 +109,7 @@ export class Herramientasmapa {
   this.api.guardarRuta(body).subscribe({
     next: resp => {
       console.log("Ruta guardada", resp);
+      this.rutaGuardada.emit();
       this.closeSaveModal();
       this.mapService.resetMap();
       this.nombreRuta = "";

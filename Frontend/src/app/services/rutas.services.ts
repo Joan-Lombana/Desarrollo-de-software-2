@@ -16,7 +16,7 @@ export class RutasService {
  
   getRutas(perfilId: string) {
     const params = new HttpParams().set('perfil_id', perfilId);
-    console.log("📥 Consultando rutas:", `${this.baseUrl}/rutas`);
+    console.log("📥 Consultando rutas:", `${this.baseUrl}/rutas`,  "params:", params.toString());
     return this.http.get(`${this.baseUrl}/rutas`, {params});
   }
   
