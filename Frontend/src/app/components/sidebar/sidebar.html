@@ -1,7 +1,8 @@
 <aside class="sidebar" [class.open]="isOpen()">
   <div class="sidebar-brand">
-    <div class="brand-logo"><i class="fa-solid fa-truck-fast"></i></div>
+    
     @if (isOpen()) {
+      <div class="brand-logo"><i class="fa-solid fa-truck-fast"></i></div>
       <div class="brand-text"><h2>BMArutas</h2><p>Sistema de Gestión</p></div>
     }
     <button class="sidebar-toggle" (click)="toggleSidebar.emit()" title="Toggle Sidebar">
