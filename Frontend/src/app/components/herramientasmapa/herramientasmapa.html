@@ -25,6 +25,11 @@
       <img src="guardar.png" alt="Guardar">
       
     </div>
+
+    <div class="tool-item" (click)="closeSaveModalWithConfirm()" [class.disabled]="!modoDibujo" title="Cancelar trazado">
+      <img src="x.png" alt="Cancelar">
+      
+    </div>
   </div>
 </div>
 
@@ -32,7 +37,10 @@
   <div class="modal-overlay" (click)="closeSaveModal()"></div>
 
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <h3>Nombre de la ruta</h3>
+    <div class="modal-header">
+      <h3>Nombre de la ruta</h3>
+      <button class="close-btn" (click)="closeSaveModalWithConfirm()" title="Cerrar">×</button>
+    </div>
     <input type="text" [(ngModel)]="nombreRuta" placeholder="Ej: Ruta Zona Norte">
 
     <button class="btn-confirm" (click)="saveRoute()">Guardar</button>

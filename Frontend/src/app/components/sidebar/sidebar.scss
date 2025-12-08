@@ -17,18 +17,16 @@ $hover-bg: rgba(255, 255, 255, 0.08);
   position: fixed;
   left: 0;
   top: 0;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
   display: flex;
   flex-direction: column;
   box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
-}
 
-/* ===================
-   MOBILE: sidebar oculto
-   =================== */
-.sidebar:not(.open) {
-  transform: translateX(-100%);
+  &:not(.open) {
+    width: 80px;
+    padding: 1.5rem 1rem;
+  }
 }
 
 /* ===================
@@ -41,6 +39,11 @@ $hover-bg: rgba(255, 255, 255, 0.08);
   padding-bottom: 2rem;
   margin-bottom: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  .sidebar:not(.open) & {
+    justify-content: center;
+    gap: 8px;
+  }
 
   .brand-logo {
     display: flex;
@@ -60,6 +63,8 @@ $hover-bg: rgba(255, 255, 255, 0.08);
   }
 
   .brand-text {
+    flex: 1;
+
     h2 {
       font-size: 1.25rem;
       font-weight: 700;
@@ -71,6 +76,35 @@ $hover-bg: rgba(255, 255, 255, 0.08);
       font-size: 0.75rem;
       color: $text-secondary;
       margin: 0;
+    }
+  }
+
+  .sidebar-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-secondary;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    i {
+      font-size: 14px;
+      transition: transform 0.3s ease;
+
+      &.fa-rotate-180 {
+        transform: rotate(180deg);
+      }
     }
   }
 }
@@ -209,11 +243,23 @@ $hover-bg: rgba(255, 255, 255, 0.08);
   .sidebar {
     transform: translateX(-100%);
     box-shadow: none;
+    width: $sidebar-width !important;
+    padding: 1.5rem !important;
   }
 
   .sidebar.open {
     transform: translateX(0);
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .sidebar-toggle {
+    display: none;
+  }
+}
+
+@media (min-width: 1025px) {
+  .sidebar {
+    transform: translateX(0);
   }
 }
 

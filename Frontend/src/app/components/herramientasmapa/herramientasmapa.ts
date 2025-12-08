@@ -46,6 +46,20 @@ export class Herramientasmapa {
     this.showSaveModal = false;
   }
 
+  closeSaveModalWithConfirm() {
+    if (this.modoDibujo) {
+      const confirmar = confirm('¿Estás seguro de cancelar el trazado? Se perderán los puntos no guardados.');
+      if (!confirmar) return;
+      
+      // Si confirma, limpiar el modo de dibujo
+      this.mapService.disablePointSelection();
+      this.mapService.resetMap();
+      this.modoDibujo = false;
+      this.nombreRuta = "";
+    }
+    this.showSaveModal = false;
+  }
+
   // Retroceder último punto
   undoPoint() {
     this.mapService.undoLastPoint();

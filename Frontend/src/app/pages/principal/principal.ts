@@ -6,6 +6,7 @@ import { MapaComponent } from '../../components/mapa/mapa';
 import { Herramientasmapa } from '../../components/herramientasmapa/herramientasmapa';
 import { VehiculosService } from '../../services/vehiculos.services';
 import { RutasService } from '../../services/rutas.services';
+import { LeafletMapService } from '../../services/leaflet-map.services';
 
 interface Ruta { 
   id: number; 
@@ -24,8 +25,7 @@ interface Vehiculo {
 interface Stats { 
   vehiculosActivos: number; 
   rutasCompletadas: number; 
-  eficiencia: number; 
-  kmRecorridos: number; 
+  rutasActivas: number; 
 }
 interface FormRuta { 
   nombre: string; 
@@ -54,6 +54,7 @@ interface FormDireccion {
 export class PrincipalComponent implements OnInit {
   private vehiculosService = inject(VehiculosService);
   private rutasService = inject(RutasService);
+  private leafletMapService = inject(LeafletMapService);
   private perfilId = 'bcadd725-99a9-458f-bb7f-2eea173c0eb3';
 
   sidebarOpen = signal(true);
@@ -69,7 +70,7 @@ export class PrincipalComponent implements OnInit {
   
   rutas = signal<Ruta[]>([]);
   vehiculos = signal<Vehiculo[]>([]);
-  stats = signal<Stats>({ vehiculosActivos: 0, rutasCompletadas: 0, eficiencia: 0, kmRecorridos: 0 });
+  stats = signal<Stats>({ vehiculosActivos: 0, rutasCompletadas: 0, rutasActivas: 0 });
 
   ngOnInit() {
     this.cargarRutas();
@@ -112,10 +113,16 @@ export class PrincipalComponent implements OnInit {
     this.vehiculos().filter(v => v.activo).length;
     const rutasCompletadas = 
     this.rutas().filter(r => r.estado === 'completada').length;
-    this.stats.set({ vehiculosActivos, rutasCompletadas, eficiencia: 86, kmRecorridos: 142 });
+    const rutasActivas = 
+    this.rutas().filter(r => r.estado === 'activa' || r.estado === 'programada').length;
+    this.stats.set({ vehiculosActivos, rutasCompletadas, rutasActivas });
   }
 
-  toggleSidebar() { this.sidebarOpen.update(v => !v);}
+  toggleSidebar() { 
+    this.sidebarOpen.update(v => !v);
+    // Redimensionar el mapa cuando el sidebar cambia de estado
+    this.leafletMapService.resizeMap();
+  }
   seleccionarVehiculo(v: Vehiculo) { this.vehiculoSeleccionado.set(v); }
 
   abrirModalRegistrarRuta() { 

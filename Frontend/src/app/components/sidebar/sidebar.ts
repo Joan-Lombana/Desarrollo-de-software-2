@@ -17,6 +17,7 @@ interface MenuItem {
 export class SidebarComponent {
   isOpen = input<boolean>(true);
   closeSidebar = output<void>();
+  toggleSidebar = output<void>();
 
   menuItems: MenuItem[] = [
     { label: 'Principal', route: '/principal', icon: 'dashboard' },

@@ -4,6 +4,9 @@
     @if (isOpen()) {
       <div class="brand-text"><h2>BMArutas</h2><p>Sistema de Gestión</p></div>
     }
+    <button class="sidebar-toggle" (click)="toggleSidebar.emit()" title="Toggle Sidebar">
+      <i class="fa-solid fa-bars" [class.fa-rotate-180]="isOpen()"></i>
+    </button>
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section">

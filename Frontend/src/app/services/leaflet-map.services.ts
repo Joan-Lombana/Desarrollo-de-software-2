@@ -19,6 +19,15 @@ export class LeafletMapService {
 
   constructor(private http: HttpClient) {}
 
+  /** Redimensiona el mapa cuando el contenedor cambia de tamaño */
+  resizeMap() {
+    if (this.map) {
+      setTimeout(() => {
+        this.map!.invalidateSize();
+      }, 100);
+    }
+  }
+
   /** Inicializa el mapa */
   initMap(containerId: string) {
     if (this.map) return;
