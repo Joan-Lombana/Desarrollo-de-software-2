@@ -4,63 +4,127 @@
     <app-header (toggleSidebar)="toggleSidebar()"></app-header>
     <main class="dashboard">
       <div class="page-header">
-        <div class="header-content">
-          
-        </div>
+        <div class="header-content"></div>
         <div class="quick-actions">
           <button class="btn-action primary" (click)="abrirModalRegistrarRuta()"><i class="fa-solid fa-plus"></i> Registrar Ruta</button>
           <button class="btn-action secondary" (click)="abrirModalRegistrarVehiculo()"><i class="fa-solid fa-truck"></i> Registrar Vehículo</button>
           <button class="btn-action outline" (click)="abrirModalIngresarDireccion()"><i class="fa-solid fa-location-dot"></i> Nueva Dirección</button>
         </div>
       </div>
+
       <div class="content-grid">
         <section class="map-section">
           <div class="section-card">
-            
             <div class="card-header">
               <h2>Mapa</h2>
+
               <select class="select-route" (change)="seleccionarRuta($event)">
                 <option value="">Todas las rutas</option>
                 <option *ngFor="let ruta of rutas()" [value]="ruta.id">{{ ruta.nombre_ruta }}</option>
               </select>
-
             </div>
+
             <div class="mapa-container">
-              <app-herramientasmapa *ngIf="showRouteTools()" (cerrarHerramientas)="showRouteTools.set(false)" (rutaGuardada)="cargarRutas()"></app-herramientasmapa>
-              <app-mapa> </app-mapa> 
+              <app-herramientasmapa
+                *ngIf="showRouteTools()"
+                (cerrarHerramientas)="showRouteTools.set(false)"
+                (rutaGuardada)="cargarRutas()">
+              </app-herramientasmapa>
+
+              <app-mapa></app-mapa>
             </div>
           </div>
-          
         </section>
+
         <aside class="side-panel">
           <h3>Vehículos</h3>
+
           <div class="vehicle-list" *ngIf="vehiculos().length > 0; else noVehiculos">
-            <div *ngFor="let v of vehiculos()" class="vehicle-item" [class.active]="vehiculoSeleccionado()?.id === v.id" (click)="seleccionarVehiculo(v)">
+            <div *ngFor="let v of vehiculos()" class="vehicle-item"
+              [class.active]="vehiculoSeleccionado()?.id === v.id"
+              (click)="seleccionarVehiculo(v)">
+
               <div class="vehicle-icon"><i class="fa-solid fa-truck"></i></div>
-              <div class="vehicle-info"><div class="placa">{{ v.placa }}</div><div class="modelo">{{ v.modelo }}</div></div>
-              <span class="vehicle-status" [class.activo]="v.activo" [class.inactivo]="!v.activo">{{ v.activo ? 'Activo' : 'Inactivo' }}</span>
+
+              <div class="vehicle-info">
+                <div class="placa">{{ v.placa }}</div>
+                <div class="modelo">{{ v.modelo }}</div>
+              </div>
+
+              <span class="vehicle-status" 
+                [class.activo]="v.activo" 
+                [class.inactivo]="!v.activo">
+                {{ v.activo ? 'Activo' : 'Inactivo' }}
+              </span>
             </div>
           </div>
-          <ng-template #noVehiculos><div class="empty-state"><i class="fa-solid fa-truck"></i><p>No hay vehículos registrados</p></div></ng-template>
+
+          <ng-template #noVehiculos>
+            <div class="empty-state">
+              <i class="fa-solid fa-truck"></i>
+              <p>No hay vehículos registrados</p>
+            </div>
+          </ng-template>
         </aside>
       </div>
+
       <div class="stats-grid">
-        <div class="stat-card green"><div class="stat-header"><div class="stat-icon"><i class="fa-solid fa-truck-moving"></i></div></div><div class="stat-body"><h3>{{ stats().vehiculosActivos }}</h3><p>Vehículos Activos</p></div></div>
-        <div class="stat-card blue"><div class="stat-header"><div class="stat-icon"><i class="fa-solid fa-route"></i></div></div><div class="stat-body"><h3>{{ stats().rutasCompletadas }}</h3><p>Rutas Completadas</p></div></div>
-        <div class="stat-card orange"><div class="stat-header"><div class="stat-icon"><i class="fa-solid fa-road"></i></div></div><div class="stat-body"><h3>{{ stats().rutasActivas }}</h3><p>Rutas Activas</p></div></div>
+        <div class="stat-card green">
+          <div class="stat-header">
+            <div class="stat-icon"><i class="fa-solid fa-truck-moving"></i></div>
+          </div>
+          <div class="stat-body">
+            <h3>{{ stats().vehiculosActivos }}</h3>
+            <p>Vehículos Activos</p>
+          </div>
+        </div>
+
+        <div class="stat-card blue">
+          <div class="stat-header">
+            <div class="stat-icon"><i class="fa-solid fa-route"></i></div>
+          </div>
+          <div class="stat-body">
+            <h3>{{ stats().rutasCompletadas }}</h3>
+            <p>Rutas Completadas</p>
+          </div>
+        </div>
+
+        <div class="stat-card orange">
+          <div class="stat-header">
+            <div class="stat-icon"><i class="fa-solid fa-road"></i></div>
+          </div>
+          <div class="stat-body">
+            <h3>{{ stats().rutasActivas }}</h3>
+            <p>Rutas Activas</p>
+          </div>
+        </div>
       </div>
     </main>
   </div>
 </div>
 
+<!-- MODAL: Registrar Ruta -->
 <div class="modal-overlay" *ngIf="showRegistrarRutaModal()" (click)="cerrarModalRegistrarRuta()">
   <div class="modal-container" (click)="$event.stopPropagation()">
-    <div class="modal-header"><h2>Registrar Nueva Ruta</h2><button class="close-btn" (click)="cerrarModalRegistrarRuta()">✕</button></div>
+    <div class="modal-header">
+      <h2>Registrar Nueva Ruta</h2>
+      <button class="close-btn" (click)="cerrarModalRegistrarRuta()">✕</button>
+    </div>
+
     <div class="modal-body">
       <form (submit)="$event.preventDefault(); guardarRuta()">
-        <div class="form-group"><label>Nombre</label><input type="text" [value]="formRuta().nombre" (input)="formRuta().nombre = $any($event.target).value" required></div>
-        <div class="form-group"><label>Zona</label><input type="text" [value]="formRuta().zona" (input)="formRuta().zona = $any($event.target).value" required></div>
-        <div class="form-group"><label>Horario</label><input type="time" [value]="formRuta().horario" (input)="formRuta().horario = $any($event.target).value" required></div>
+        
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" [value]="formRuta().nombre" (input)="formRuta().nombre = $any($event.target).value" required>
+        </div>
+
+
+        <div class="form-group">
+          <label>Horario</label>
+          <input type="time" [value]="formRuta().horario" (input)="formRuta().horario = $any($event.target).value" required>
+        </div>
+
         <div class="modal-actions">
           <button type="button" class="btn-cancel" (click)="cerrarModalRegistrarRuta()">Cancelar</button>
           <button type="button" class="btn-secondary" (click)="trazarRuta()"><i class="fa-solid fa-pen-nib"></i> Trazar en Mapa</button>
@@ -71,30 +135,76 @@
   </div>
 </div>
 
+<!-- MODAL: Registrar Vehículo -->
 <div class="modal-overlay" *ngIf="showRegistrarVehiculoModal()" (click)="cerrarModalRegistrarVehiculo()">
   <div class="modal-container" (click)="$event.stopPropagation()">
-    <div class="modal-header"><h2>Registrar Vehículo</h2><button class="close-btn" (click)="cerrarModalRegistrarVehiculo()">✕</button></div>
+    <div class="modal-header">
+      <h2>Registrar Vehículo</h2>
+      <button class="close-btn" (click)="cerrarModalRegistrarVehiculo()">✕</button>
+    </div>
+
     <div class="modal-body">
       <form (submit)="$event.preventDefault(); guardarVehiculo()">
-        <div class="form-group"><label>Placa</label><input type="text" [value]="formVehiculo().placa" (input)="formVehiculo().placa = $any($event.target).value" required></div>
-        <div class="form-group"><label>Modelo</label><input type="text" [value]="formVehiculo().modelo" (input)="formVehiculo().modelo = $any($event.target).value" required></div>
-        <div class="form-group"><label>Marca</label><input type="text" [value]="formVehiculo().marca" (input)="formVehiculo().marca = $any($event.target).value" required></div>
-        <div class="form-group"><label>Estado</label><select [value]="formVehiculo().activo" (change)="formVehiculo().activo = ($any($event.target).value === 'true')"><option value="true">Activo</option><option value="false">Inactivo</option></select></div>
-        <div class="modal-actions"><button type="button" class="btn-cancel" (click)="cerrarModalRegistrarVehiculo()">Cancelar</button><button type="submit" class="btn-submit">Registrar</button></div>
+
+        <div class="form-group">
+          <label>Placa</label>
+          <input type="text" [value]="formVehiculo().placa" (input)="formVehiculo().placa = $any($event.target).value" required>
+        </div>
+
+        <div class="form-group">
+          <label>Modelo</label>
+          <input type="text" [value]="formVehiculo().modelo" (input)="formVehiculo().modelo = $any($event.target).value" required>
+        </div>
+
+        <div class="form-group">
+          <label>Marca</label>
+          <input type="text" [value]="formVehiculo().marca" (input)="formVehiculo().marca = $any($event.target).value" required>
+        </div>
+
+        <div class="form-group">
+          <label>Estado</label>
+          <select [value]="formVehiculo().activo" (change)="formVehiculo().activo = ($any($event.target).value === 'true')">
+            <option value="true">Activo</option>
+            <option value="false">Inactivo</option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="cerrarModalRegistrarVehiculo()">Cancelar</button>
+          <button type="submit" class="btn-submit">Registrar</button>
+        </div>
+
       </form>
     </div>
   </div>
 </div>
 
+<!-- MODAL: Nueva Dirección -->
 <div class="modal-overlay" *ngIf="showIngresarDireccionModal()" (click)="cerrarModalIngresarDireccion()">
   <div class="modal-container" (click)="$event.stopPropagation()">
-    <div class="modal-header"><h2>Ingresar Dirección</h2><button class="close-btn" (click)="cerrarModalIngresarDireccion()">✕</button></div>
+    <div class="modal-header">
+      <h2>Ingresar Dirección</h2>
+      <button class="close-btn" (click)="cerrarModalIngresarDireccion()">✕</button>
+    </div>
+
     <div class="modal-body">
       <form (submit)="$event.preventDefault(); guardarDireccion()">
-        
-        <div class="form-group"><label>Dirección</label><input type="text" [value]="formDireccion().direccion" (input)="formDireccion().direccion = $any($event.target).value" required></div>
-        <div class="form-group"><label>Orden</label><input type="number" [value]="formDireccion().orden" (input)="formDireccion().orden = +$any($event.target).value" min="1" required></div>
-        <div class="modal-actions"><button type="button" class="btn-cancel" (click)="cerrarModalIngresarDireccion()">Cancelar</button><button type="submit" class="btn-submit">Agregar</button></div>
+
+        <div class="form-group">
+          <label>Dirección</label>
+          <input type="text" [value]="formDireccion().direccion" (input)="formDireccion().direccion = $any($event.target).value" required>
+        </div>
+
+        <div class="form-group">
+          <label>Orden</label>
+          <input type="number" [value]="formDireccion().orden" (input)="formDireccion().orden = +$any($event.target).value" min="1" required>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="cerrarModalIngresarDireccion()">Cancelar</button>
+          <button type="submit" class="btn-submit">Agregar</button>
+        </div>
+
       </form>
     </div>
   </div>

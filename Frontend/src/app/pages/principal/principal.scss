@@ -165,22 +165,44 @@ $radius: 12px;
     display: flex; 
     flex-direction: column; 
     overflow: hidden;
+    
     .card-header {
       padding: 1.5rem; 
       border-bottom: 1px solid $light; 
       display: flex; 
       justify-content: space-between; 
       align-items: center;
+      border-bottom: 3px solid #10b981;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
       h2 { 
-        font-size: 1.2rem; 
-        color: $dark; 
+        font-size: 1.4rem; 
+        color: #1a202c; 
+        font-weight: 700;
       }
+
+      ::before {
+            content: '🗺️';
+            font-size: 1.5rem;
+            filter: grayscale(0);
+        }
       .select-route { 
         padding: 0.5rem; 
         border-radius: 8px; 
-        border: 1px solid $light; 
+        border: 2px solid $light; 
         color: $text; 
+        
+
+        &:focus {
+          outline: none;
+          box-shadow: 0 0 0 1px rgba($primary, 0.2);
+          }
+      .select-route option {
+        padding: 3px 8px !important;
+        font-size: 0.9rem;
+        line-height: 1.2 !important;
       }
+      }
+       
     }
 
     .mapa-container {

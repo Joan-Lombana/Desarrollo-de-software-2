@@ -31,17 +31,30 @@ export class LeafletMapService {
 
   /** Inicializa el mapa */
   initMap(containerId: string) {
-    if (this.map) return;
+  // Si el contenedor cambió (Angular destruyó el HTML), recrea el mapa
+  const container = document.getElementById(containerId);
 
+  if (!container) return;
+
+  // Si el mapa existe pero el DIV fue recreado → reinicializar
+  if (this.map && this.map.getContainer() !== container) {
+    this.map.remove();   // elimina completamente el mapa anterior
+    this.map = null;
+  }
+
+  if (!this.map) {
     this.map = L.map(containerId).setView([3.8801, -77.0312], 14);
 
     L.tileLayer(
       `https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=${this.MAPBOX_TOKEN}`,
-      { tileSize: 512, zoomOffset: -1, attribution: '© Mapbox © OpenStreetMap' }
+      { tileSize: 512, zoomOffset: -1 }
     ).addTo(this.map);
-
-    this.map.getContainer().style.cursor = 'grab';
   }
+
+  // Recalcular tamaño siempre
+  setTimeout(() => this.map!.invalidateSize(), 200);
+}
+
 
   isRouteCreated() {
     return this.routeCreated;
