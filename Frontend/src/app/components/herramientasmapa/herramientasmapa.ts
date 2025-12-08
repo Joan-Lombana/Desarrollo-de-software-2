@@ -14,7 +14,7 @@ import { RutasService } from '../../services/rutas.services';
   styleUrl: './herramientasmapa.scss',
 })
 export class Herramientasmapa {
-
+  @Output() cerrarHerramientas = new EventEmitter<void>();
   @Output() rutaGuardada = new EventEmitter<void>();
 
   showSaveModal = false;
@@ -49,18 +49,23 @@ export class Herramientasmapa {
   }
 
   closeSaveModalWithConfirm() {
-    if (this.modoDibujo) {
-      const confirmar = confirm('¿Estás seguro de cancelar el trazado? Se perderán los puntos no guardados.');
-      if (!confirmar) return;
-      
-      // Si confirma, limpiar el modo de dibujo
-      this.mapService.disablePointSelection();
-      this.mapService.resetMap();
-      this.modoDibujo = false;
-      this.nombreRuta = "";
-    }
-    this.showSaveModal = false;
+  let continuar = true;
+  if (this.modoDibujo) {
+    continuar = confirm(
+      '¿Estás seguro de cerrar? Se perderán los puntos no guardados.'
+    );
+
+    if (!continuar) return;
+
+    this.mapService.disablePointSelection();
+    this.mapService.resetMap();
+    this.modoDibujo = false;
+    this.nombreRuta = "";
   }
+  this.cerrarHerramientas.emit();
+}
+
+
 
   // Retroceder último punto
   undoPoint() {

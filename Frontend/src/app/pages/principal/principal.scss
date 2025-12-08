@@ -183,7 +183,7 @@ $radius: 12px;
       }
     }
 
-    .map-container {
+    .mapa-container {
       flex: 1; 
       min-height: 500px; 
       background: $bg; 
@@ -199,8 +199,7 @@ $radius: 12px;
         position: absolute; 
         top: 10px; 
         left: 50%; 
-        transform: translateX(-50%); 
-        z-index: 1000; 
+        z-index: 10000; 
       }
     }
   }

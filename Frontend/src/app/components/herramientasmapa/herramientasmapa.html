@@ -10,32 +10,26 @@
         <img src="seleccionar.png" alt="Seleccionar">
     </div>
 
-
     <div class="tool-item" (click)="undoPoint()" title="Revertir">
       <img src="back.png" alt="Retroceder">
-      
     </div>
 
     <div class="tool-item" (click)="makeRoute()" title="Generar ruta">
       <img src="crear.png" alt="Ruta">
-      
     </div>
 
     <div class="tool-item" (click)="openSaveModal()" [class.disabled]="!routeReady()" title="Guardar ruta">
       <img src="guardar.png" alt="Guardar">
-      
     </div>
 
-    <div class="tool-item" (click)="closeSaveModalWithConfirm()" [class.disabled]="!modoDibujo" title="Cancelar trazado">
+    <div class="tool-item" (click)="closeSaveModalWithConfirm()" title="Cerrar">
       <img src="x.png" alt="Cancelar">
-      
     </div>
   </div>
 </div>
 
-<div class="save-modal" *ngIf="showSaveModal">
-  <div class="modal-overlay" (click)="closeSaveModal()"></div>
-
+<!-- Modal fuera del map-container -->
+<div class="save-modal" *ngIf="showSaveModal"> <div class="modal-overlay" (click)="closeSaveModal()"></div>
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h3>Nombre de la ruta</h3>
@@ -46,5 +40,7 @@
     <button class="btn-confirm" (click)="saveRoute()">Guardar</button>
   </div>
 </div>
+
+  
 
 

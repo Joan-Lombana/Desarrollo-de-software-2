@@ -5,8 +5,7 @@
     <main class="dashboard">
       <div class="page-header">
         <div class="header-content">
-          <h1>Rastreo de Rutas</h1>
-          <p class="subtitle">Monitoreo en tiempo real de vehículos y rutas</p>
+          
         </div>
         <div class="quick-actions">
           <button class="btn-action primary" (click)="abrirModalRegistrarRuta()"><i class="fa-solid fa-plus"></i> Registrar Ruta</button>
@@ -17,21 +16,21 @@
       <div class="content-grid">
         <section class="map-section">
           <div class="section-card">
+            
             <div class="card-header">
-              <h2>Mapa en Tiempo Real</h2>
+              <h2>Mapa</h2>
               <select class="select-route" (change)="seleccionarRuta($event)">
                 <option value="">Todas las rutas</option>
                 <option *ngFor="let ruta of rutas()" [value]="ruta.id">{{ ruta.nombre_ruta }}</option>
               </select>
 
-
-
             </div>
-            <div class="map-container">
-              <app-mapa></app-mapa>
-              <app-herramientasmapa *ngIf="showRouteTools()"  (rutaGuardada)="cargarRutas()"></app-herramientasmapa>
+            <div class="mapa-container">
+              <app-herramientasmapa *ngIf="showRouteTools()" (cerrarHerramientas)="showRouteTools.set(false)" (rutaGuardada)="cargarRutas()"></app-herramientasmapa>
+              <app-mapa> </app-mapa> 
             </div>
           </div>
+          
         </section>
         <aside class="side-panel">
           <h3>Vehículos</h3>

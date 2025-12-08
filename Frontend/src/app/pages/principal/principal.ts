@@ -288,6 +288,5 @@ export class PrincipalComponent implements OnInit {
 
     this.cerrarModalIngresarDireccion();
   }
-
   
 }
